@@ -7,6 +7,15 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 
+/**
+ * Example:
+ * {
+ * "link":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664",
+ * "number":"9672",
+ * "name":"Name of bill",
+ * "registrationDate":"2023-09-04"
+ * }
+ */
 @Getter
 @Setter
 @ToString

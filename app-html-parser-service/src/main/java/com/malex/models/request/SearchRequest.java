@@ -5,6 +5,22 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Example:
+ * {
+ *    "link":"https://itd.rada.gov.ua/billInfo/Bills/searchResults",
+ *    "formUrlencodedData":[
+ *       {
+ *          "key":"BillSearchModel.registrationNumber",
+ *          "value":"9672"
+ *       },
+ *       {
+ *          "key":"BillSearchModel.registrationNumberCompareOperation",
+ *          "value":"2"
+ *       }
+ *    ]
+ * }
+ */
 @Data
 public class SearchRequest {
 

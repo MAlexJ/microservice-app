@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "562abdd1-27d4-41aa-87aa-d174929ca8ce",
+		"name": "test api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946"
+	},
+	"item": [
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get bills",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"link\":\"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\",\r\n    \"number\":\"9672\",\r\n    \"name\": \"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\r\n    \"registrationDate\":\"2023-09-04\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/v1/bills",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"v1",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchResults",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"link\":\"https://itd.rada.gov.ua/billInfo/Bills/searchResults\",\r\n   \"formUrlencodedData\":[\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumber\",\r\n         \"value\":\"9672\"\r\n      },\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumberCompareOperation\",\r\n         \"value\":\"2\"\r\n      }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/v1/searchResults",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"v1",
+						"searchResults"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
