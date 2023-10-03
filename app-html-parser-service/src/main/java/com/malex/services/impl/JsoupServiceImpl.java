@@ -1,7 +1,9 @@
 package com.malex.services.impl;
 
 import com.malex.exceptions.JsoupServiceException;
+import com.malex.models.base.Bill;
 import com.malex.models.base.BillStatus;
+import com.malex.services.AbstractService;
 import com.malex.services.JsoupService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,32 +15,61 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
-public class JsoupServiceImpl implements JsoupService {
-    private final static String NAV_TAB1_ELEMENT = "nav-tab1";
-    private final static String TBODY_ELEMENT = "tbody";
-    private final static String TR_ELEMENT = "tr";
-    private final static String TD_ELEMENT = "td";
-
-    /**
-     * Error messages
-     */
-    private final static String ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND = "Element by tag - '%s' was not found";
-    private final static String ERROR_MSG_ELEMENTS_BY_TAG_NOT_FOUND = "Elements by tag - '%s' was not found";
-
+public class JsoupServiceImpl extends AbstractService implements JsoupService {
 
     @Override
     public Flux<BillStatus> processHtmlRequest(String html) {
-            Document document = Jsoup.parse(html);
-            Element tableElement = findNavTab1Element(document, Element::firstElementChild);
-            Element tbody = findTBodyElement(tableElement, Elements::first);
-            Elements trElements = findTrElements(tbody);
-            List<BillStatus> result = findTableElements(trElements);
-            return Flux.fromIterable(result);
+        Document document = Jsoup.parse(html);
+        Element tableElement = findNavTab1Element(document, Element::firstElementChild);
+        Element tbody = findTBodyElement(tableElement, Elements::first);
+        Elements trElements = findTrElements(tbody);
+        List<BillStatus> result = findTableElements(trElements);
+        return Flux.fromIterable(result);
 
+    }
+
+    @Override
+    public Flux<Bill> processSearchResult(String html) {
+        Document document = Jsoup.parse(html);
+        Elements elements = findEuroBoxElements(document);
+        List<Bill> bills = findBills(elements);
+        return Flux.fromIterable(bills);
+    }
+
+    private List<Bill> findBills(Elements elements) {
+        return elements.stream() //
+                .map(element -> {
+                    Elements tdElements = findTDElementsOfEuroBoxTable(element);
+                    return buildBill(tdElements);
+                }) //
+                .collect(Collectors.toList());
+    }
+
+    private Elements findTDElementsOfEuroBoxTable(Element element) {
+        return Optional.ofNullable(element.parent()) //
+                .map(el -> el.getElementsByTag(TD_ELEMENT)) //
+                .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, EURO_BOX_ELEMENT + "." + TD_ELEMENT));
+    }
+
+
+    private Bill buildBill(Elements tdElements) {
+        return Bill.builder() //
+                .link(tdElements.select(A_ELEMENT).first().attr(HREF_ELEMENT)) //
+                .number(tdElements.get(1).text()) //
+                .registrationDate(tdElements.get(2).text()) //
+                .name(tdElements.last().text()) //
+                .build();
+    }
+
+    private Elements findEuroBoxElements(Document document) {
+        Elements elements = document.getElementsByClass(EURO_BOX_ELEMENT);
+        if (elements.isEmpty()) {
+            throw new JsoupServiceException(String.format(ERROR_MSG_ELEMENTS_BY_TAG_NOT_FOUND, EURO_BOX_ELEMENT));
+        }
+        return elements;
     }
 
 
@@ -93,11 +124,6 @@ public class JsoupServiceImpl implements JsoupService {
                 .data(getElementText(tdElements, "first -> data", Elements::first)) //
                 .status(getElementText(tdElements, "last -> status", Elements::last)) //
                 .build();
-    }
-
-
-    private Supplier<JsoupServiceException> buildError(String errorMessage, String tag) {
-        return () -> new JsoupServiceException(String.format(errorMessage, tag));
     }
 
 }

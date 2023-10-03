@@ -1,10 +1,12 @@
 package com.malex.controllers;
 
+import com.malex.models.base.Bill;
 import com.malex.models.base.BillStatus;
 import com.malex.models.base.FormUrlencodedData;
 import com.malex.models.request.BillRequest;
 import com.malex.models.request.SearchRequest;
 import com.malex.models.response.BillResponse;
+import com.malex.models.response.SearchResponse;
 import com.malex.services.JsoupService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,22 +37,27 @@ public class ApiControllers {
 
     @PostMapping("/bills")
     public Mono<BillResponse> findBill(@RequestBody BillRequest request) {
-        log.info("Start processing HTTP request - {}", request);
+        log.info("Start processing parse API request - {}", request);
         return apiGetRequest(request.getLink()) //
                 .doOnNext(message -> log.info("Processing of HTML page by Jsoup service")) //
                 .flatMapMany(html -> jsoupService.processHtmlRequest(html)) //
                 .collectList() //
                 .map(statuses -> buildBillResponse(request, statuses)) //
-                .doOnNext(message -> log.info("HTTP response processing completed, response - {}", message));
+                .doOnNext(message -> log.info("Parse API response processing completed, response - {}", message));
     }
 
 
     @PostMapping("/searchResults")
-    public Mono<String> searchResults(@RequestBody SearchRequest request) {
-        Mono<String> retrieve = apiPostRequest(request);
-        // impl
-        return retrieve;
+    public Mono<SearchResponse> searchResults(@RequestBody SearchRequest request) {
+        log.info("Start processing search API request - {}", request);
+        return apiPostRequest(request) //
+                .doOnNext(message -> log.info("Processing of HTML page by Jsoup service")) //
+                .flatMapMany(html -> jsoupService.processSearchResult(html)) //
+                .collectList() //
+                .map(this::buildSearchResponse) //
+                .doOnNext(message -> log.info("Search API response processing completed, response - {}", message));
     }
+
 
     private Mono<String> apiPostRequest(SearchRequest request) {
         return webClient.post() //
@@ -61,18 +68,25 @@ public class ApiControllers {
                 .bodyToMono(String.class);
     }
 
-    private static MultiValueMap<String, String> buildPostFormData(List<FormUrlencodedData> dataList) {
-        Map<String, List<String>> formUrlencodedData = dataList.stream() //
-                .collect(Collectors.toMap(FormUrlencodedData::getKey, formData -> List.of(formData.getValue())));
-        return new LinkedMultiValueMap<>(formUrlencodedData);
-    }
-
 
     private Mono<String> apiGetRequest(String url) {
         return webClient.get() //
                 .uri(url) //
                 .retrieve() //
                 .bodyToMono(String.class);
+    }
+
+
+    private MultiValueMap<String, String> buildPostFormData(List<FormUrlencodedData> dataList) {
+        Map<String, List<String>> formUrlencodedData = dataList.stream() //
+                .collect(Collectors.toMap(FormUrlencodedData::getKey, formData -> List.of(formData.getValue())));
+        return new LinkedMultiValueMap<>(formUrlencodedData);
+    }
+
+    private SearchResponse buildSearchResponse(List<Bill> bills) {
+        return SearchResponse.builder() //
+                .bills(bills) //
+                .build();
     }
 
 
