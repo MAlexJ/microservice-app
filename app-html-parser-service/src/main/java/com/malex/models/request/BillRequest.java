@@ -1,9 +1,7 @@
 package com.malex.models.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.time.LocalDate;
 
@@ -16,13 +14,18 @@ import java.time.LocalDate;
  * "registrationDate":"2023-09-04"
  * }
  */
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+@Data
 public class BillRequest {
+
+    @JsonProperty("link")
     private String link;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("number")
     private String number;
+
+    @JsonProperty("registrationDate")
     private LocalDate registrationDate;
 }

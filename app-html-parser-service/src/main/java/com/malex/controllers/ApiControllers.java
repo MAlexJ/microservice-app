@@ -1,29 +1,23 @@
 package com.malex.controllers;
 
+import com.malex.mapper.ObjectMapper;
 import com.malex.models.base.Bill;
 import com.malex.models.base.BillStatus;
-import com.malex.models.base.FormUrlencodedData;
 import com.malex.models.request.BillRequest;
 import com.malex.models.request.SearchRequest;
 import com.malex.models.response.BillResponse;
 import com.malex.models.response.SearchResponse;
-import com.malex.services.JsoupService;
+import com.malex.services.ApiRestService;
+import com.malex.services.HtmlPageParsingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -31,16 +25,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1")
 public class ApiControllers {
 
-    private WebClient webClient;
-    private JsoupService jsoupService;
-
+    private ObjectMapper mapper;
+    private ApiRestService restService;
+    private HtmlPageParsingService parsingService;
 
     @PostMapping("/bills")
-    public Mono<BillResponse> findBill(@RequestBody BillRequest request) {
-        log.info("Start processing parse API request - {}", request);
-        return apiGetRequest(request.getLink()) //
-                .doOnNext(message -> log.info("Processing of HTML page by Jsoup service")) //
-                .flatMapMany(html -> jsoupService.processBillStatus(html)) //
+    public Mono<BillResponse> findBillStatuses(@RequestBody BillRequest request) {
+        log.info("Start processing find bill statuses to search statuses and parse HTML page, request - {}", request);
+        return restService.fetchBillStatus(request.getLink()) //
+                .doOnNext(message -> log.info("Processing html page with Html/Jsoup parsing service")) //
+                .flatMapMany(html -> parsingService.processBillStatus(html)) //
                 .collectList() //
                 .map(statuses -> buildBillResponse(request, statuses)) //
                 .doOnNext(message -> log.info("Parse API response processing completed, response - {}", message));
@@ -48,39 +42,14 @@ public class ApiControllers {
 
 
     @PostMapping("/searchResults")
-    public Mono<SearchResponse> searchResults(@RequestBody SearchRequest request) {
-        log.info("Start processing search API request - {}", request);
-        return apiPostRequest(request) //
-                .doOnNext(message -> log.info("Processing of HTML page by Jsoup service")) //
-                .flatMapMany(html -> jsoupService.processBillSearchResult(html)) //
+    public Mono<SearchResponse> findBillsByCriteria(@RequestBody SearchRequest request) {
+        log.info("Start processing find bills and parse HTML page, request - {}", request);
+        return restService.fetchSearchResult(request.getLink(), request.getFormUrlencodedData()) //
+                .doOnNext(message -> log.info("Processing html page with Html/Jsoup parsing service")) //
+                .flatMapMany(html -> parsingService.processBillSearchResult(html)) //
                 .collectList() //
                 .map(this::buildSearchResponse) //
                 .doOnNext(message -> log.info("Search API response processing completed, response - {}", message));
-    }
-
-
-    private Mono<String> apiPostRequest(SearchRequest request) {
-        return webClient.post() //
-                .uri(request.getLink()) //
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED) //
-                .body(BodyInserters.fromFormData(buildPostFormData(request.getFormUrlencodedData()))) //
-                .retrieve() //
-                .bodyToMono(String.class);
-    }
-
-
-    private Mono<String> apiGetRequest(String url) {
-        return webClient.get() //
-                .uri(url) //
-                .retrieve() //
-                .bodyToMono(String.class);
-    }
-
-
-    private MultiValueMap<String, String> buildPostFormData(List<FormUrlencodedData> dataList) {
-        Map<String, List<String>> formUrlencodedData = dataList.stream() //
-                .collect(Collectors.toMap(FormUrlencodedData::getKey, formData -> List.of(formData.getValue())));
-        return new LinkedMultiValueMap<>(formUrlencodedData);
     }
 
 
@@ -92,13 +61,9 @@ public class ApiControllers {
 
 
     private BillResponse buildBillResponse(BillRequest request, List<BillStatus> statuses) {
-        return BillResponse.builder() //
-                .link(request.getLink()) //
-                .name(request.getName()) //
-                .number(request.getNumber()) //
-                .registrationDate(request.getRegistrationDate()) //
-                .statuses(statuses) //
-                .build();
+        BillResponse billResponse = mapper.convertToResponse(request);
+        billResponse.setStatuses(statuses);
+        return billResponse;
     }
 
 }

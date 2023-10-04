@@ -1,18 +1,16 @@
 package com.malex.services;
 
 import com.malex.exceptions.JsoupServiceException;
-import com.malex.models.base.Bill;
-import com.malex.models.base.BillStatus;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import reactor.core.publisher.Flux;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public abstract class AbstractService {
 
@@ -36,62 +34,62 @@ public abstract class AbstractService {
 
     protected static final Predicate<Elements> IS_ELEMENT_NOT_EMPTY = el -> !el.isEmpty();
 
-    protected Document processHtml(String html) {
-        return Jsoup.parse(html);
-    }
-
-    protected <T> Flux<T> toFlux(Iterable<? extends T> it) {
-        return Flux.fromIterable(it);
-    }
-
 
     protected Supplier<JsoupServiceException> buildError(String errorMessage, String tag) {
         return () -> new JsoupServiceException(String.format(errorMessage, tag));
     }
 
-    protected BillStatus buildModel(Elements tdElements) {
-        return BillStatus.builder() //
-                .data(getElementText(tdElements, "first -> data", Elements::first)) //
-                .status(getElementText(tdElements, "last -> status", Elements::last)) //
-                .build();
+
+    protected List<Elements> parseTableElements(Elements elements) {
+        return elements.stream() //
+                .map(this::parseTdEuroBoxTableElements) //
+                .collect(Collectors.toList());
     }
 
-    private String getElementText(Elements elements, String tag, Function<Elements, Element> fn) {
-        Element element = fn.apply(elements);
+
+    private Elements parseTdEuroBoxTableElements(Element element) {
+        return Optional.ofNullable(element.parent()) //
+                .map(el -> el.getElementsByTag(TD_ELEMENT)) //
+                .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, EURO_BOX_ELEMENT + "." + TD_ELEMENT));
+    }
+
+    protected List<Elements> parseTdTableElements(Elements elements) {
+        return elements.stream() //
+                .map(els -> Optional.of(els.getElementsByTag(TD_ELEMENT)) //
+                        .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, TD_ELEMENT))) //
+                .collect(Collectors.toList());
+    }
+
+
+    protected Elements parseEuroBoxElements(Document document) {
+        return Optional.of(document.getElementsByClass(EURO_BOX_ELEMENT)) //
+                .filter(IS_ELEMENT_NOT_EMPTY) //
+                .orElseThrow(() -> //
+                        new JsoupServiceException(String.format(ERROR_MSG_ELEMENTS_BY_TAG_NOT_FOUND, EURO_BOX_ELEMENT)));
+    }
+
+
+    protected Element parseNavTab1Element(Element element, Function<Element, Element> applyFunction) {
         return Optional.ofNullable(element) //
-                .map(Element::text) //
-                .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, tag));
-
+                .map(el -> el.getElementById(NAV_TAB1_ELEMENT)) //
+                .map(applyFunction) //
+                .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, NAV_TAB1_ELEMENT));
     }
 
-    protected Bill buildBill(Elements tdElements) {
-        return Bill.builder() //
-                .link(parseBillLink(tdElements)) //
-                .number(parseBillNumber(tdElements)) //
-                .registrationDate(parseBillRegistrationDate(tdElements)) //
-                .name(parseBillName(tdElements)) //
-                .build();
+
+    protected Element parseTBodyElement(Element element, Function<Elements, Element> applyFunction) {
+        return Optional.ofNullable(element) //
+                .map(el -> el.getElementsByTag(TBODY_ELEMENT)) //
+                .map(applyFunction) //
+                .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, TBODY_ELEMENT));
     }
 
-    private String parseBillName(Elements tdElements) {
-        return Optional.ofNullable(tdElements.last()) //
-                .map(Element::text) //
-                .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, "td, for bill name"));
+
+    protected Elements parseTrElements(Element element) {
+        return Optional.ofNullable(element) //
+                .map(el -> el.getElementsByTag(TR_ELEMENT)) //
+                .orElseThrow(buildError(ERROR_MSG_ELEMENTS_BY_TAG_NOT_FOUND, TR_ELEMENT));
     }
 
-    private String parseBillRegistrationDate(Elements tdElements) {
-        return tdElements.get(2).text();
-    }
-
-    private String parseBillNumber(Elements tdElements) {
-        return tdElements.get(1).text();
-    }
-
-    private String parseBillLink(Elements tdElements) {
-        return Optional.of(tdElements.select(A_ELEMENT)) //
-                .map(Elements::first) //
-                .map(el -> el.attr(HREF_ELEMENT)) //
-                .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, HREF_ELEMENT + ", for bill link"));
-    }
 
 }
