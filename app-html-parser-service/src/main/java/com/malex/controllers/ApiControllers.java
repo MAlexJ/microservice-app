@@ -40,7 +40,7 @@ public class ApiControllers {
         log.info("Start processing parse API request - {}", request);
         return apiGetRequest(request.getLink()) //
                 .doOnNext(message -> log.info("Processing of HTML page by Jsoup service")) //
-                .flatMapMany(html -> jsoupService.processHtmlRequest(html)) //
+                .flatMapMany(html -> jsoupService.processBillStatus(html)) //
                 .collectList() //
                 .map(statuses -> buildBillResponse(request, statuses)) //
                 .doOnNext(message -> log.info("Parse API response processing completed, response - {}", message));
@@ -52,7 +52,7 @@ public class ApiControllers {
         log.info("Start processing search API request - {}", request);
         return apiPostRequest(request) //
                 .doOnNext(message -> log.info("Processing of HTML page by Jsoup service")) //
-                .flatMapMany(html -> jsoupService.processSearchResult(html)) //
+                .flatMapMany(html -> jsoupService.processBillSearchResult(html)) //
                 .collectList() //
                 .map(this::buildSearchResponse) //
                 .doOnNext(message -> log.info("Search API response processing completed, response - {}", message));
@@ -82,6 +82,7 @@ public class ApiControllers {
                 .collect(Collectors.toMap(FormUrlencodedData::getKey, formData -> List.of(formData.getValue())));
         return new LinkedMultiValueMap<>(formUrlencodedData);
     }
+
 
     private SearchResponse buildSearchResponse(List<Bill> bills) {
         return SearchResponse.builder() //

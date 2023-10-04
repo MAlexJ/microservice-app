@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface JsoupService {
 
-    Flux<BillStatus> processHtmlRequest(String html);
+    Flux<BillStatus> processBillStatus(String html);
 
-    Flux<Bill> processSearchResult(String html);
+    Flux<Bill> processBillSearchResult(String html);
 }
