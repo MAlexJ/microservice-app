@@ -1,0 +1,14 @@
+server:
+  port: 8086
+
+scheduled:
+  task:
+    job:
+      cron: ${SCHEDULER_CRONE:0/10 * * * * *}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:false}
