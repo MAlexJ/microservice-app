@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1")
-public class ApiControllers {
+public class ApiRestController {
 
     private ObjectMapper mapper;
     private ApiRestService restService;
