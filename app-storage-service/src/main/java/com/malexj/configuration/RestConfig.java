@@ -1,6 +1,7 @@
 package com.malexj.configuration;
 
 import com.malexj.entity.Bill;
+import com.malexj.entity.BillStatus;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,6 @@ public class RestConfig implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        config.exposeIdsFor(Bill.class);
+        config.exposeIdsFor(Bill.class, BillStatus.class);
     }
 }

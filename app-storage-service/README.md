@@ -14,7 +14,9 @@ Description: <br>
 
 ### Spring Data REST
 
-Information: <br>
+1. Issue with POST nested entities (OneToMany)
+How to POST nested entities with Spring Data REST
+link: https://stackoverflow.com/questions/24569399/how-to-post-nested-entities-with-spring-data-rest
 
 
 ### QueryQSL (Web Support)
