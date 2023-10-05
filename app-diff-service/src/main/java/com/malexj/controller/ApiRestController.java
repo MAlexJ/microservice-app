@@ -1,5 +1,7 @@
 package com.malexj.controller;
 
+import com.malexj.mapper.ObjectMapper;
+import com.malexj.model.Bill;
 import com.malexj.model.request.BillRequest;
 import com.malexj.model.response.BillResponse;
 import com.malexj.service.StorageService;
@@ -10,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -17,6 +21,7 @@ import reactor.core.publisher.Mono;
 public class ApiRestController {
 
     private StorageService storageService;
+    private ObjectMapper mapper;
 
     @PostMapping("/diff")
     @ResponseStatus(HttpStatus.CREATED)
@@ -25,9 +30,17 @@ public class ApiRestController {
         // 1. find bill by number
         Mono<ResponseEntity<BillResponse>> bodyBuilderMono = //
                 storageService.findBillByNumber(request.getNumber()) //
+       // 2. convert BillResponse to Bill
+                        .doOnNext(response -> {
+                            List<Bill> bills = response.getEmbedded().getBills();
+                            if (!bills.isEmpty()) {
+                                Bill expectedBill = bills.stream().findFirst().get();
+                                Bill actualBill = mapper.convertToResponse(request);
+                                log.info("equals = " + expectedBill.equals(actualBill));
+                            }
+                        }) //
                         .map(ResponseEntity::ok).doOnError(r -> ResponseEntity.internalServerError());
 
-        // 2. convert BillResponse to Bill
 
         // 3. compare bill
 

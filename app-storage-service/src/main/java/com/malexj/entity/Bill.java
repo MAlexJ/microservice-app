@@ -7,7 +7,6 @@ import lombok.Data;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
 @Data
@@ -15,9 +14,6 @@ import java.util.List;
 @QueryEntity
 @Table(name = "bill")
 public class Bill {
-
-    private static final Comparator<BillStatus> BILL_STATUSES_COMPARATOR_BY_DATE_DES //
-            = Comparator.comparing(BillStatus::getData).reversed();
 
     @JsonProperty("id")
     @Id
@@ -46,8 +42,6 @@ public class Bill {
     }
 
     private void applyBillStatuses(List<BillStatus> statuses) {
-        statuses.stream() //
-                .sorted(BILL_STATUSES_COMPARATOR_BY_DATE_DES) //
-                .forEach(status -> status.setBill(this));
+        statuses.forEach(status -> status.setBill(this));
     }
 }
