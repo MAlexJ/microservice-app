@@ -1,5 +1,6 @@
 package com.malexj.entity;
 
+import com.querydsl.core.annotations.QueryEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@QueryEntity
 @Table(name = "bill_status")
 public class BillStatus {
 

@@ -1,6 +1,7 @@
 package com.malexj.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.querydsl.core.annotations.QueryEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
+@QueryEntity
 @Table(name = "bill")
 public class Bill {
 
