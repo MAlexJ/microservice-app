@@ -23,13 +23,4 @@ public class Bill {
 
     @JsonProperty("statuses")
     private List<BillStatus> statuses;
-
-    @Data
-    public static class BillStatus {
-        @JsonProperty("data")
-        private LocalDate data;
-
-        @JsonProperty("status")
-        private String status;
-    }
 }

@@ -1,6 +1,7 @@
 package com.malexj.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.malexj.model.BillStatus;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -24,12 +25,4 @@ public class BillRequest {
     @JsonProperty("statuses")
     private List<BillStatus> statuses;
 
-    @Data
-    public static class BillStatus {
-        @JsonProperty("data")
-        private LocalDate data;
-
-        @JsonProperty("status")
-        private String status;
-    }
 }
