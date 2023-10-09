@@ -7,6 +7,4 @@ import reactor.core.publisher.Mono;
 public interface ErrorHandlingService {
 
     Mono<ResponseEntity<DiffResponse>> handleError(Throwable error);
-
-    Mono<DiffResponse> buildResponse(String message);
 }

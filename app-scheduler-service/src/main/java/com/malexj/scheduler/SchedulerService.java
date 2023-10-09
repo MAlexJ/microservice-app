@@ -30,6 +30,8 @@ public class SchedulerService {
     private final static String SEARCH_API_URL = "http://localhost:8085/v1/searchResults";
     private final static String BILL_STATUSES_API_URL = "http://localhost:8085/v1/bills";
 
+    private final static String DIFF_API_URL = "http://localhost:8088/v1/diff";
+
     /**
      * init data
      */
@@ -47,7 +49,8 @@ public class SchedulerService {
         handleErrors(() -> {
             Mono<SearchResponse> billResponseMono = fetchSearchBill();
             Flux<BillResponse> billStatuses = fetchBillStatuses(billResponseMono);
-            billStatuses.subscribe();
+            Flux<String> diffResponseFlux = fetchDiff(billStatuses);
+            diffResponseFlux.subscribe();
         });
     }
 
@@ -58,6 +61,17 @@ public class SchedulerService {
         } catch (WebClientRequestException ex) {
             log.warn(ex.getMessage());
         }
+    }
+
+    private Flux<String> fetchDiff(Flux<BillResponse> billStatuses) {
+        return billStatuses.flatMap(billResponse ->  //
+                webClient.post() //
+                        .uri(DIFF_API_URL) //
+                        .contentType(MediaType.APPLICATION_JSON) //
+                        .bodyValue(mapper.responseMapper(billResponse)) //
+                        .retrieve() //
+                        .bodyToMono(String.class) //
+                        .doOnNext(response -> log.info("Diff service - {}", response.toString())));
     }
 
 

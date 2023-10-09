@@ -31,7 +31,13 @@ public class ApiRestController {
         return storageService.findBillByNumber(request.getNumber()) //
                 .flatMap(response -> verificationService.verifyBillResponse(request, response))//
                 .flatMap(statuses -> comparisonService.compareBillStatuses(request.getStatuses(), statuses)) //
-                .flatMap(billStatuses -> errorHandlingService.buildResponse("Bill statuses are equal")).map(ResponseEntity::ok) //
+                .flatMap(billStatuses -> buildResponse("Bill statuses are equal")) //
+                .map(ResponseEntity::ok) //
                 .onErrorResume(error -> errorHandlingService.handleError(error));
+    }
+
+
+    public Mono<DiffResponse> buildResponse(String message) {
+        return Mono.just(DiffResponse.builder().message(message).build());
     }
 }

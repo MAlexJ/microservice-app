@@ -26,12 +26,11 @@ public class ErrorHandlingServiceImpl implements ErrorHandlingService {
 
 
     private Mono<ResponseEntity<DiffResponse>> buildResponseEntity(int status, String message) {
-        return buildResponse(message).map(diffResponse -> ResponseEntity.status(status).body(diffResponse));
+        DiffResponse response = DiffResponse.builder() //
+                .message(message) //
+                .build();
+        return Mono.just(response) //
+                .map(diffResponse -> ResponseEntity.status(status).body(diffResponse));
     }
 
-
-    @Override
-    public Mono<DiffResponse> buildResponse(String message) {
-        return Mono.just(DiffResponse.builder().message(message).build());
-    }
 }
