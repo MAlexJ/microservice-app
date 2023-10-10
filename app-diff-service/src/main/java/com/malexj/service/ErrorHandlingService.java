@@ -1,10 +1,8 @@
 package com.malexj.service;
 
-import com.malexj.model.response.DiffResponse;
-import org.springframework.http.ResponseEntity;
-import reactor.core.publisher.Mono;
+import com.malexj.model.request.BillRequest;
 
 public interface ErrorHandlingService {
 
-    Mono<ResponseEntity<DiffResponse>> handleError(Throwable error);
+    void handleError(Throwable error, BillRequest request);
 }

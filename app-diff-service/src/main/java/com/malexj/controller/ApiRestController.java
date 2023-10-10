@@ -1,11 +1,7 @@
 package com.malexj.controller;
 
 import com.malexj.model.request.BillRequest;
-import com.malexj.model.response.DiffResponse;
-import com.malexj.service.BillComparisonService;
-import com.malexj.service.BillVerificationService;
-import com.malexj.service.ErrorHandlingService;
-import com.malexj.service.StorageService;
+import com.malexj.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,23 +17,23 @@ import reactor.core.publisher.Mono;
 public class ApiRestController {
 
     private StorageService storageService;
+    private CallableService callableService;
     private BillComparisonService comparisonService;
+    private NotificationService notificationService;
     private ErrorHandlingService errorHandlingService;
     private BillVerificationService verificationService;
 
     @PostMapping("/diff")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<ResponseEntity<DiffResponse>> diff(@RequestBody BillRequest request) {
-        return storageService.findBillByNumber(request.getNumber()) //
-                .flatMap(response -> verificationService.verifyBillResponse(request, response))//
-                .flatMap(statuses -> comparisonService.compareBillStatuses(request.getStatuses(), statuses)) //
-                .flatMap(billStatuses -> buildResponse("Bill statuses are equal")) //
-                .map(ResponseEntity::ok) //
-                .onErrorResume(error -> errorHandlingService.handleError(error));
+    public Mono<ResponseEntity<Object>> diff(@RequestBody BillRequest request) {
+        callableService.execute(() -> //
+                storageService.findBillByNumber(request.getNumber()) //
+                        .flatMap(response -> verificationService.verifyBillResponse(response))//
+                        .flatMap(statuses -> comparisonService.compareBillStatuses(request.getStatuses(), statuses)) //
+                        .filter(diffStatuses -> !diffStatuses.isEmpty()) //
+                        .map(statuses -> notificationService.sendNotification(statuses)).doOnError(throwable -> errorHandlingService.handleError(throwable, request)) //
+                        .subscribe());
+        return Mono.empty().map(ResponseEntity::ok);
     }
 
-
-    public Mono<DiffResponse> buildResponse(String message) {
-        return Mono.just(DiffResponse.builder().message(message).build());
-    }
 }

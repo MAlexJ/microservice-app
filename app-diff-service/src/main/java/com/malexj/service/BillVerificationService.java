@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface BillVerificationService {
 
-    Mono<List<BillStatus>> verifyBillResponse(BillRequest request, BillResponse response);
+    Mono<List<BillStatus>> verifyBillResponse(BillResponse response);
 
 }

@@ -1,10 +1,8 @@
 package com.malexj.service.impl;
 
 import com.malexj.exception.NoSuchBillException;
-import com.malexj.exception.NoSuchBillStatusException;
 import com.malexj.model.Bill;
 import com.malexj.model.BillStatus;
-import com.malexj.model.request.BillRequest;
 import com.malexj.model.response.BillResponse;
 import com.malexj.service.BillVerificationService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,35 +11,35 @@ import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 @Service
 public class BillVerificationServiceImpl implements BillVerificationService {
 
-    public Mono<List<BillStatus>> verifyBillResponse(BillRequest request, BillResponse response) {
-        String reqNumber = request.getNumber();
-        List<BillStatus> requestStatuses = request.getStatuses();
+    public Mono<List<BillStatus>> verifyBillResponse(BillResponse response) {
+        try {
+            log.warn(">>>> START SLEEP");
+            Thread.sleep(4000);
+            log.warn(">>>> END SLEEP");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        BillResponse.Page page = response.getPage();
+        if (Objects.nonNull(page) && page.getSize() > 1) {
+            log.warn("more than one bill found in database, bills - {}", response.getEmbedded());
+        }
+        return Mono.just(extractBillStatuses(response));
+    }
 
-        List<Bill> respBills = Optional.ofNullable(response.getEmbedded()) //
+    private List<BillStatus> extractBillStatuses(BillResponse response) {
+        return Optional.ofNullable(response.getEmbedded()) //
                 .map(BillResponse.Embedded::getBills) //
                 .filter(bills -> !CollectionUtils.isEmpty(bills)) //
-                .orElseThrow((() -> new NoSuchBillException("Bill not found in the database by number - " + reqNumber)));
-
-        if (respBills.size() > 1) {
-            log.warn("more than one bill found by number - {}, bills - {}", requestStatuses, respBills);
-        }
-
-        List<BillStatus> respStatuses = Optional.of(respBills) //
                 .flatMap(bills -> bills.stream().findFirst()) //
                 .map(Bill::getStatuses) //
-                .filter(statuses -> allBillStatusesAreNotEmpty(statuses, requestStatuses)) //
-                .orElseThrow((() -> new NoSuchBillStatusException("Request and response bill statuses are different")));
-
-        return Mono.just(respStatuses);
+                .orElseThrow((() -> new NoSuchBillException("Bill not found in database")));
     }
 
-    private boolean allBillStatusesAreNotEmpty(List<BillStatus> requestStatuses, List<BillStatus> responseStatuses) {
-        return !requestStatuses.isEmpty() && !responseStatuses.isEmpty();
-    }
 }

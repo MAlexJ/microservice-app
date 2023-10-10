@@ -1,7 +1,6 @@
 package com.malexj.service.impl;
 
 import com.google.common.collect.Sets;
-import com.malexj.exception.BillStatusDifferenceException;
 import com.malexj.model.BillStatus;
 import com.malexj.service.BillComparisonService;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,7 @@ public class BillComparisonServiceImpl implements BillComparisonService {
     @Override
     public Mono<Set<BillStatus>> compareBillStatuses(List<BillStatus> requestBillStatus, List<BillStatus> responseBillStatus) {
         Set<BillStatus> diff = Sets.difference(Sets.newHashSet(requestBillStatus), Sets.newHashSet(responseBillStatus));
-        if (!diff.isEmpty()) {
-            return Mono.error(new BillStatusDifferenceException(diff));
-        }
+        // todo: Additional logic
         return Mono.just(diff);
     }
 }
