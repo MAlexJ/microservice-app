@@ -1,5 +1,6 @@
 package com.malexj.service.impl;
 
+import com.malexj.model.request.BillRequest;
 import com.malexj.model.response.BillResponse;
 import com.malexj.service.StorageService;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,16 @@ public class StorageServiceImpl implements StorageService {
         return webClient.get() //
                 .uri(url.toUri()) //
                 .retrieve()//
+                .bodyToMono(BillResponse.class) //
+                .doOnNext(response -> log.info("Response " + response));
+    }
+
+    @Override
+    public Mono<BillResponse> saveNewBill(BillRequest request) {
+        return webClient.post() //
+                .uri(STORAGE_SERVICE_URL) //
+                .contentType(MediaType.APPLICATION_JSON).bodyValue(request) //
+                .retrieve() //
                 .bodyToMono(BillResponse.class) //
                 .doOnNext(response -> log.info("Response " + response));
     }

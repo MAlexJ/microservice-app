@@ -31,7 +31,8 @@ public class ApiRestController {
                         .flatMap(response -> verificationService.verifyBillResponse(response))//
                         .flatMap(statuses -> comparisonService.compareBillStatuses(request.getStatuses(), statuses)) //
                         .filter(diffStatuses -> !diffStatuses.isEmpty()) //
-                        .map(statuses -> notificationService.sendNotification(statuses)).doOnError(throwable -> errorHandlingService.handleError(throwable, request)) //
+                        .map(statuses -> notificationService.sendNotification(statuses)) //
+                        .doOnError(throwable -> errorHandlingService.handleError(throwable, request)) //
                         .subscribe());
         return Mono.empty().map(ResponseEntity::ok);
     }

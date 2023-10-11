@@ -27,7 +27,7 @@ public class BillVerificationServiceImpl implements BillVerificationService {
             throw new RuntimeException(e);
         }
         BillResponse.Page page = response.getPage();
-        if (Objects.nonNull(page) && page.getSize() > 1) {
+        if (Objects.nonNull(page) && page.getTotalElements() > 1) {
             log.warn("more than one bill found in database, bills - {}", response.getEmbedded());
         }
         return Mono.just(extractBillStatuses(response));
