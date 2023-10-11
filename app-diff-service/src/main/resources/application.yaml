@@ -1,2 +1,7 @@
 server:
   port: 8088
+
+storage-service:
+  url: ${STORAGE_SERVICE_URL:http://localhost:8087}
+  path:
+    find-bills: ${STORAGE_SERVICE_FIND_BILLS_PATH:/bills}

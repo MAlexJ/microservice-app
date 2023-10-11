@@ -2,7 +2,7 @@ package com.malexj.controller;
 
 import com.malexj.model.request.BillRequest;
 import com.malexj.service.*;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +12,16 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/v1")
 public class ApiRestController {
 
-    private StorageService storageService;
-    private CallableService callableService;
-    private BillComparisonService comparisonService;
-    private NotificationService notificationService;
-    private ErrorHandlingService errorHandlingService;
-    private BillVerificationService verificationService;
+    private final StorageService storageService;
+    private final CallableService callableService;
+    private final BillComparisonService comparisonService;
+    private final NotificationService notificationService;
+    private final ErrorHandlingService errorHandlingService;
+    private final BillVerificationService verificationService;
 
     @PostMapping("/diff")
     @ResponseStatus(HttpStatus.CREATED)

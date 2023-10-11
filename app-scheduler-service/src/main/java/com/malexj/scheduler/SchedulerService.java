@@ -5,7 +5,7 @@ import com.malexj.model.request.BillRequest;
 import com.malexj.model.request.SearchRequest;
 import com.malexj.model.response.BillResponse;
 import com.malexj.model.response.SearchResponse;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SchedulerService {
 
     /**
@@ -40,8 +40,8 @@ public class SchedulerService {
             "BillSearchModel.registrationNumber", "9672", //
             "BillSearchModel.registrationNumberCompareOperation", "2");
 
-    private WebClient webClient;
-    private BilDtoMapper mapper;
+    private final WebClient webClient;
+    private final BilDtoMapper mapper;
 
 
     @Scheduled(cron = "${scheduled.task.job.cron}")
