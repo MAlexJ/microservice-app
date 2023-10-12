@@ -22,7 +22,7 @@ public class ErrorHandlingServiceImpl implements ErrorHandlingService {
         if (error instanceof NoSuchBillException) {
 
             // it doesn't work !!
-            Mono<BillResponse> billResponseMono = storageService.saveNewBill(request);
+            Mono<BillResponse> billResponseMono = storageService.save(request);
              billResponseMono //
                      .doOnNext(response -> log.info(">>> " + response));
         }

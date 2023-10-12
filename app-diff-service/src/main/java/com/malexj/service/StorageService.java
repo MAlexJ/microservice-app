@@ -8,5 +8,5 @@ public interface StorageService {
 
     Mono<BillResponse> findBillByNumber(String number);
 
-    Mono<BillResponse> saveNewBill(BillRequest request);
+    Mono<BillResponse> save(BillRequest request);
 }
