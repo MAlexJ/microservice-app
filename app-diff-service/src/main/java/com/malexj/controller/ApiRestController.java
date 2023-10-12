@@ -39,7 +39,7 @@ public class ApiRestController {
                         .flatMap(statuses -> comparisonService.compareBillStatuses(request.getStatuses(), statuses)) //
                         .filter(diffStatuses -> !diffStatuses.isEmpty()) //
                         // 4. Send diff bill statuses to mail notification service
-                        .map(notificationService::sendNotification) //
+                        .flatMap(notificationService::sendNotification) //
                         // 5. handle case when bill not found in database then it's new bill and we should save in database
                         .doOnError(error -> errorHandlingService.handleNewBillInRequest(request, error)) //
                         // 6. suppress custom exception in stacktrace logs
