@@ -1,13 +1,18 @@
-package com.serjlemast.model.response;
+package com.serjlemast.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.time.LocalDate;
-
-
+/**
+ * Example:
+ * {
+ * "toEmail":"for my dear...",
+ * "title":"My title",
+ * "message":"My message"
+ * }
+ */
 @Data
-public class EmailResponse {
+public class EmailRequest {
 
     @JsonProperty("toEmail")
     private String toEmail;
@@ -17,11 +22,4 @@ public class EmailResponse {
 
     @JsonProperty("message")
     private String message;
-
-    @JsonProperty("registrationDate")
-    private LocalDate registrationDate;
-
-    @JsonProperty("status")
-    private String status;    //todo
-
 }

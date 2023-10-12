@@ -1,36 +1,34 @@
 package com.serjlemast.controller;
 
-import com.serjlemast.mapper.ObjectMapper;
-import com.serjlemast.model.request.EmailRequest;
-import com.serjlemast.model.response.EmailResponse;
+import com.serjlemast.model.EmailRequest;
 import com.serjlemast.service.impl.EmailSenderServiceImpl;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/mail")
 public class ApiRestController {
 
-    private ObjectMapper mapper;
-    private EmailSenderServiceImpl emailSender;
+    private final EmailSenderServiceImpl emailSender;
 
     @PostMapping("/send")
-    public EmailResponse findBillStatuses(@RequestBody EmailRequest request) {
-        log.info("Start processing sending email, request - ", request);
-        EmailRequest emailRequest = emailSender.sendEmail(request);
-        return buildEmailResponse(emailRequest, "Successfully");
+    public ResponseEntity<Void> sendEmail(@RequestBody EmailRequest request) {
+        log.info("Start processing sending email, request - {}", request);
+        emailSender.sendEmail(request);
+        log.info("End processing sending");
+        return ResponseEntity.noContent().build();
     }
 
-    private EmailResponse buildEmailResponse(EmailRequest request, String status) {
-        EmailResponse emailResponse = mapper.convertToResponse(request);
-        emailResponse.setStatus(status);
-        return emailResponse;
+    @ExceptionHandler({MailException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(Exception ex) {
+        return new ResponseEntity<>("Cant send message, ex: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
 }

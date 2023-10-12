@@ -1,6 +1,6 @@
 package com.serjlemast.service;
 
-import com.serjlemast.model.request.EmailRequest;
+import com.serjlemast.model.EmailRequest;
 
 public interface EmailSenderService {
 
