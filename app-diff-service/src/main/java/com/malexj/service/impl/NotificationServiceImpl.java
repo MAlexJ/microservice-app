@@ -12,8 +12,8 @@ import java.util.Set;
 @Service
 public class NotificationServiceImpl implements NotificationService {
     @Override
-    public Mono<Set<BillStatus>> sendNotification(Set<BillStatus> statuses) {
+    public Mono<Void> sendNotification(Set<BillStatus> statuses) {
         log.info(">>> Send diff to notification service");
-        return Mono.just(statuses);
+        return Mono.empty();
     }
 }

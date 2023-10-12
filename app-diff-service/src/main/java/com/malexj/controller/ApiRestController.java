@@ -27,14 +27,24 @@ public class ApiRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<ResponseEntity<Object>> diff(@RequestBody BillRequest request) {
         callableService.execute(() -> //
+                // 1. Find bill by number in Database
                 storageService.findBillByNumber(request.getNumber()) //
-                        .flatMap(response -> verificationService.verifyBillResponse(response))//
+                        // 2. Verify bill response
+                        // 2.1 Only one dill find by number
+                        // 2.2 If not found bill in Database then throw exception -NoSuchBillException
+                        .flatMap(verificationService::verifyBillResponse)//
+                        // 3. Compare bill statuses
+                        // 3.1 if not found difference then send empty result
+                        // 3.2 if we have difference in bill statuses then send set of diff statuses
                         .flatMap(statuses -> comparisonService.compareBillStatuses(request.getStatuses(), statuses)) //
                         .filter(diffStatuses -> !diffStatuses.isEmpty()) //
-                        .map(statuses -> notificationService.sendNotification(statuses)) //
-                        .doOnError(throwable -> errorHandlingService.handleError(throwable, request)) //
+                        // 4. Send diff bill statuses to mail notification service
+                        .map(notificationService::sendNotification) //
+                        // 5. handle case when bill not found in database then it's new bill and we should save in database
+                        .doOnError(error -> errorHandlingService.handleNewBillInRequest(request, error)) //
+                        // 6. suppress custom exception in stacktrace logs
+                        .onErrorResume(errorHandlingService::suppressNoSuchBillException) //
                         .subscribe());
         return Mono.empty().map(ResponseEntity::ok);
     }
-
 }
