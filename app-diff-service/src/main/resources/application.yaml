@@ -9,4 +9,4 @@ storage-service:
 mail-service:
   url: ${APP_MAIL_SERVICE_URL:http://localhost:8089}
   path:
-    send-email: /mail
+    send-email: /mail/send
