@@ -42,7 +42,8 @@ public class StorageServiceImpl implements StorageService {
     public Mono<BillResponse> save(BillRequest request) {
         return webClient.post() //
                 .uri(buildUri()) //
-                .contentType(MediaType.APPLICATION_JSON).bodyValue(request) //
+                .contentType(MediaType.APPLICATION_JSON) //
+                .bodyValue(request) //
                 .retrieve() //
                 .bodyToMono(BillResponse.class) //
                 .doOnNext(response -> log.info("Response " + response));
