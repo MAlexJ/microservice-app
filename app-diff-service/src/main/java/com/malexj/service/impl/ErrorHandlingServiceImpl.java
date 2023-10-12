@@ -2,31 +2,43 @@ package com.malexj.service.impl;
 
 import com.malexj.exception.NoSuchBillException;
 import com.malexj.model.request.BillRequest;
-import com.malexj.model.response.BillResponse;
+import com.malexj.service.CallableService;
 import com.malexj.service.ErrorHandlingService;
 import com.malexj.service.StorageService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ErrorHandlingServiceImpl implements ErrorHandlingService {
 
-    private StorageService storageService;
+    private final StorageService storageService;
+    private final CallableService callableService;
 
     @Override
-    public void handleError(Throwable error, BillRequest request) {
+    public void handleNewBillInRequest(BillRequest request, Throwable error) {
         if (error instanceof NoSuchBillException) {
-
-            // it doesn't work !!
-            Mono<BillResponse> billResponseMono = storageService.save(request);
-             billResponseMono //
-                     .doOnNext(response -> log.info(">>> " + response));
+            callableService.execute(() -> saveNewBillInDatabase(request));
         }
-        throw new RuntimeException(error.getMessage());
+    }
+
+    private Disposable saveNewBillInDatabase(BillRequest request) {
+        return storageService.save(request) //
+                .doOnNext(response -> log.info("Bill - {} has been successfully saved in database.", response.getEmbedded())) //
+                .subscribe();
+    }
+
+    @Override
+    public <T> Mono<T> suppressNoSuchBillException(Throwable error) {
+        if (error instanceof NoSuchBillException) {
+            log.warn(error.getMessage());
+            return Mono.empty();
+        }
+        return Mono.error(error);
     }
 
 }

@@ -19,13 +19,6 @@ import java.util.Optional;
 public class BillVerificationServiceImpl implements BillVerificationService {
 
     public Mono<List<BillStatus>> verifyBillResponse(BillResponse response) {
-        try {
-            log.warn(">>>> START SLEEP");
-            Thread.sleep(4000);
-            log.warn(">>>> END SLEEP");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         BillResponse.Page page = response.getPage();
         if (Objects.nonNull(page) && page.getTotalElements() > 1) {
             log.warn("more than one bill found in database, bills - {}", response.getEmbedded());
