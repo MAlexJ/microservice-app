@@ -2,6 +2,7 @@ package com.malexj.service.impl;
 
 import com.malexj.model.request.BillRequest;
 import com.malexj.model.response.BillResponse;
+import com.malexj.service.AbstractService;
 import com.malexj.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +20,13 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StorageServiceImpl implements StorageService {
+public class StorageServiceImpl extends AbstractService implements StorageService {
 
-    @Value("${storage-service.url}")
-    private String storageServiceUrl;
+    @Value("${storage-service.base-url}")
+    private String baseUrl;
 
-    @Value("${storage-service.path.find-bills}")
-    private String findBillsPath;
+    @Value("${storage-service.endpoint.bills}")
+    private String endpoint;
 
     private final WebClient webClient;
 
@@ -41,7 +42,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public Mono<BillResponse> save(BillRequest request) {
         return webClient.post() //
-                .uri(buildUri()) //
+                .uri(buildUri(baseUrl, endpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(request) //
                 .retrieve() //
@@ -49,26 +50,14 @@ public class StorageServiceImpl implements StorageService {
                 .doOnNext(response -> log.info("Response " + response));
     }
 
-    private URI buildUri() {
-        return buildUriComponents() //
-                .build() //
-                .toUri();
-    }
-
 
     private URI buildUri(Map<String, String> queryParams) {
-        UriComponentsBuilder uriBuilder = buildUriComponents();
+        UriComponentsBuilder uriBuilder = buildUriComponents(baseUrl, endpoint);
         if (!CollectionUtils.isEmpty(queryParams)) {
             queryParams.forEach(uriBuilder::queryParam);
             uriBuilder.pathSegment();
         }
-        return uriBuilder.build() //
-                .toUri();
+        return uriBuilder.build().toUri();
     }
 
-
-    private UriComponentsBuilder buildUriComponents() {
-        return UriComponentsBuilder.fromUriString(storageServiceUrl) //
-                .path(findBillsPath);
-    }
 }

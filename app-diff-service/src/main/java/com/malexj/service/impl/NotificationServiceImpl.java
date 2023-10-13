@@ -3,6 +3,7 @@ package com.malexj.service.impl;
 import com.malexj.model.User;
 import com.malexj.model.request.BillDiffRequest;
 import com.malexj.model.request.EmailRequest;
+import com.malexj.service.AbstractService;
 import com.malexj.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,41 +11,42 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NotificationServiceImpl implements NotificationService {
+public class NotificationServiceImpl extends AbstractService implements NotificationService {
 
-    @Value("${mail-service.url}")
-    private String mailServiceUrl;
+    @Value("${mail-service.base-url}")
+    private String baseUrl;
 
-    @Value("${mail-service.path.send-email}")
-    private String pathSendMail;
+    @Value("${mail-service.endpoint.send-email}")
+    private String endpoint;
+
+    @Value("${mail-service.template.title}")
+    private String titleTemplate;
+
+    @Value("${mail-service.template.message}")
+    private String messageTemplate;
 
     // TODO temporary solution until the subscriber service is implemented
     @Value("${mail-service.test.default-recipient}")
     private String defaultRecipient;
 
-    private final static String MESSAGE_TEMPLATE = "Statuses in bill - '%s' have changed, \n bill name: %s \n new status - %s";
-    private final static String TITLE_TEMPLATE = "The status of %s bill has changed";
-
     private final WebClient webClient;
 
     @Override
-    public Mono<Void> sendNotification(BillDiffRequest request) {
+    public Mono<Object> sendNotification(BillDiffRequest request) {
         log.info(">>> Send diff to notification service");
         return webClient.post() //
-                .uri(builduri()) //
+                .uri(buildUri(baseUrl, endpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildNotificationRequest(request)) //
                 .retrieve() //
-                .bodyToMono(Void.class);
+                .bodyToMono(Object.class);
     }
 
     private EmailRequest buildNotificationRequest(BillDiffRequest request) {
@@ -52,7 +54,6 @@ public class NotificationServiceImpl implements NotificationService {
         String recipientEmail = Optional.ofNullable(request.getUser()) //
                 .map(User::getEmail) //
                 .orElse(defaultRecipient);
-
         return EmailRequest.builder() //
                 .toEmail(recipientEmail) //
                 .title(fetchMessage(request)) //
@@ -61,18 +62,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private String fetchTitle(String number) {
-        return String.format(TITLE_TEMPLATE, number);
+        return String.format(titleTemplate, number);
     }
 
     private String fetchMessage(BillDiffRequest request) {
-        return String.format(MESSAGE_TEMPLATE, request.getName(), request.getName(), request.getDiffStatuses());
-    }
-
-    private URI builduri() {
-        return UriComponentsBuilder.fromUriString(mailServiceUrl) //
-                .path(pathSendMail) //
-                .build() //
-                .toUri();
+        return String.format(messageTemplate, request.getNumber(), request.getName(), request.getDiffStatuses());
     }
 
 }

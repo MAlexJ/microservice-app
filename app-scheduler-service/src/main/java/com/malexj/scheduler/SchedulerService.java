@@ -7,11 +7,13 @@ import com.malexj.model.response.BillResponse;
 import com.malexj.model.response.SearchResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -24,13 +26,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SchedulerService {
 
-    /**
-     * API URL
-     */
-    private final static String SEARCH_API_URL = "http://localhost:8085/v1/searchResults";
-    private final static String BILL_STATUSES_API_URL = "http://localhost:8085/v1/bills";
 
-    private final static String DIFF_API_URL = "http://localhost:8088/v1/diff";
+    /**
+     * html-service REST API
+     */
+    @Value("${html-service.base-url}")
+    private String htmlApiBaseUrl;
+
+    @Value("${html-service.endpoint.bills}")
+    private String findBillsEndpoint;
+
+    @Value("${html-service.endpoint.searchResults}")
+    private String searchResultsEndpoint;
+
+    /**
+     * diff-service REST API
+     */
+    @Value("${diff-service.base-url}")
+    private String diffApiBaseUrl;
+
+    @Value("${diff-service.endpoint}")
+    private String diffApiEndpoint;
 
     /**
      * init data
@@ -66,7 +82,7 @@ public class SchedulerService {
     private Flux<String> fetchDiff(Flux<BillResponse> billStatuses) {
         return billStatuses.flatMap(billResponse ->  //
                 webClient.post() //
-                        .uri(DIFF_API_URL) //
+                        .uri(UriComponentsBuilder.fromUriString(diffApiBaseUrl).path(diffApiEndpoint).build().toUri()) //
                         .contentType(MediaType.APPLICATION_JSON) //
                         .bodyValue(mapper.responseMapper(billResponse)) //
                         .retrieve() //
@@ -77,7 +93,7 @@ public class SchedulerService {
 
     private Mono<SearchResponse> fetchSearchBill() {
         return webClient.post() //
-                .uri(SEARCH_API_URL) //
+                .uri(UriComponentsBuilder.fromUriString(htmlApiBaseUrl).path(searchResultsEndpoint).build().toUri()) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildSearchRequest()) //
                 .retrieve() //
@@ -89,7 +105,7 @@ public class SchedulerService {
     private Flux<BillResponse> fetchBillStatuses(Mono<SearchResponse> response) {
         return response.flatMapMany(r -> Flux.fromIterable(buildBillRequest(r))) //
                 .flatMap(request -> webClient.post() //
-                        .uri(BILL_STATUSES_API_URL) //
+                        .uri(UriComponentsBuilder.fromUriString(htmlApiBaseUrl).path(findBillsEndpoint).build().toUri()) //
                         .contentType(MediaType.APPLICATION_JSON) //
                         .bodyValue(request) //
                         .retrieve() //
@@ -100,7 +116,7 @@ public class SchedulerService {
 
     private List<BillRequest> buildBillRequest(SearchResponse response) {
         return response.getBills().stream() //
-                .map(bill -> mapper.responseMapper(bill)) //
+                .map(mapper::responseMapper) //
                 .collect(Collectors.toList()); //
     }
 

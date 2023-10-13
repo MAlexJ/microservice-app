@@ -2,13 +2,17 @@ server:
   port: ${APP_DIFF_SERVICE_PORT:8088}
 
 storage-service:
-  url: ${APP_STORAGE_SERVICE_URL:http://localhost:8087}
-  path:
-    find-bills: ${APP_STORAGE_SERVICE_FIND_BILLS_PATH:/bills}
+  base-url: ${APP_STORAGE_SERVICE_BASE_URL:http://localhost:8087}
+  endpoint:
+    bills: ${APP_STORAGE_SERVICE_BILL_ENDPOINT:/bills}
 
 mail-service:
-  url: ${APP_MAIL_SERVICE_URL:http://localhost:8089}
-  path:
+  base-url: ${APP_MAIL_SERVICE_URL:http://localhost:8089}
+  endpoint:
     send-email: /mail/send
+  template:
+    title: "The status of %s bill has changed"
+    message: "Bill number: '%s' \n Name: '%s' \n New status: %s"
+
   test:
     default-recipient: ${APP_MAIL_SERVICE_DEFAULT_RECIPIENT:test_test@gmail.com}
