@@ -12,7 +12,7 @@ mail-service:
     send-email: /mail/send
   template:
     title: "The status of %s bill has changed"
-    message: "Bill number: '%s' \n Name: '%s' \n New status: %s"
+    message: "Bill number: %s\nName: %s\nNew status: %s"
 
   test:
     default-recipient: ${APP_MAIL_SERVICE_DEFAULT_RECIPIENT:test_test@gmail.com}
