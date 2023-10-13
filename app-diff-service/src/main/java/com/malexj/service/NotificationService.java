@@ -1,12 +1,13 @@
 package com.malexj.service;
 
-import com.malexj.model.BillStatus;
+import com.malexj.model.request.BillDiffRequest;
 import reactor.core.publisher.Mono;
-
-import java.util.Set;
 
 public interface NotificationService {
 
-    Mono<Void> sendNotification(Set<BillStatus> statuses);
+    /**
+     * Send notification to mail-service about changing the status of bill
+     */
+    Mono<Void> sendNotification(BillDiffRequest request);
 
 }
