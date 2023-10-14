@@ -9,7 +9,7 @@ storage-service:
 mail-service:
   base-url: ${APP_MAIL_SERVICE_URL:http://localhost:8089}
   endpoint:
-    send-email: /mail/send
+    send-email: /v1/emails
   template:
     title: "The status of %s bill has changed"
     message: "Bill number: %s\nName: %s\nNew status: %s"

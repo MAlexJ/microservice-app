@@ -13,12 +13,17 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/mail")
-public class ApiRestController {
+@RequestMapping("/v1")
+public class EmailRestController extends AbstractController {
 
     private final EmailSenderServiceImpl emailSender;
 
-    @PostMapping("/send")
+
+    /**
+     * Design REST api URL - <a href="https://stackoverflow.com/questions/12310442/how-to-design-rest-api-for-email-sending-service">stackoverflow</a>
+     * and book - <a href="https://www.oreilly.com/library/view/rest-api-design/9781449317904/">REST API Design Rulebook</a>
+     */
+    @PostMapping("/emails")
     public ResponseEntity<Void> sendEmail(@RequestBody EmailRequest request) {
         log.info("Start processing sending email, request - {}", request);
         emailSender.sendEmail(request);
@@ -26,9 +31,18 @@ public class ApiRestController {
         return ResponseEntity.noContent().build();
     }
 
+
     @ExceptionHandler({MailException.class})
-    public ResponseEntity<Object> handleAccessDeniedException(Exception ex) {
-        return new ResponseEntity<>("Cant send message, ex: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleMailException(Exception ex) {
+        log.error(ex.getMessage());
+        return buildResponseEntityWithException(ex);
+    }
+
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<String> handleAllException(Exception ex) {
+        log.error(ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

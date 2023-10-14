@@ -2,7 +2,7 @@ package com.malex.services.impl;
 
 import com.malex.models.base.FormUrlencodedData;
 import com.malex.services.ApiRestService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ApiRestServiceImpl implements ApiRestService {
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
     @Override
     public Mono<String> fetchBillStatus(String url) {

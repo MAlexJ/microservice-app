@@ -20,15 +20,13 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     private final JavaMailSender mailSender;
 
 
-    public EmailRequest sendEmail(EmailRequest emailRequest) {
+    public void sendEmail(EmailRequest emailRequest) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mailFrom);
         message.setTo(emailRequest.getToEmail());
-        message.setText(emailRequest.getTitle());
-        message.setSubject(emailRequest.getMessage());
-        log.info("Sending email...");
+        message.setSubject(emailRequest.getTitle());
+        message.setText(emailRequest.getMessage());
         mailSender.send(message);
-        log.info("Email sent successfully.");
-        return emailRequest;
+        log.info("Email sent successfully");
     }
 }
