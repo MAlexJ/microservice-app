@@ -40,7 +40,7 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
 
     @Override
     public Mono<Object> sendNotification(BillDiffRequest request) {
-        log.info(">>> Send diff to notification service");
+        log.info("Send diff to notification service");
         return webClient.post() //
                 .uri(buildUri(baseUrl, endpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //

@@ -1,9 +1,10 @@
 package com.malexj.service;
 
 import com.malexj.model.response.BillResponse;
-import reactor.core.publisher.Flux;
+import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
 
 public interface DiffService {
 
-    Flux<String> fetchDiff(Flux<BillResponse> billStatuses);
+    Mono<ResponseEntity<Void>> handleDifferencesBillStatuses(BillResponse billResponse);
 }

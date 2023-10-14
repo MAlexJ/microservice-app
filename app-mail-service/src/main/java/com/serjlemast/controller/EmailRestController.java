@@ -24,6 +24,7 @@ public class EmailRestController extends AbstractController {
      * and book - <a href="https://www.oreilly.com/library/view/rest-api-design/9781449317904/">REST API Design Rulebook</a>
      */
     @PostMapping("/emails")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> sendEmail(@RequestBody EmailRequest request) {
         log.info("Start processing sending email, request - {}", request);
         emailSender.sendEmail(request);

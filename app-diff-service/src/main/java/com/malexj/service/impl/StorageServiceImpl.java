@@ -37,7 +37,7 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
                 .uri(buildUri(Map.of("number", number))) //
                 .retrieve()//
                 .bodyToMono(BillResponse.class) //
-                .doOnNext(response -> log.info("Determine difference for: " + Optional.ofNullable(response.getEmbedded())));
+                .doOnNext(response -> log.info("Bill: " + Optional.ofNullable(response.getEmbedded())));
     }
 
     @Override

@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-public class ApiRestController {
+public class DiffRestController {
 
     private final StorageService storageService;
     private final AsyncService asyncService;
