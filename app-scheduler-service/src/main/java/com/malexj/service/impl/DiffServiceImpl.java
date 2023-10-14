@@ -41,6 +41,6 @@ public class DiffServiceImpl implements DiffService {
                         .bodyValue(mapper.responseMapper(billResponse)) //
                         .retrieve() //
                         .bodyToMono(String.class) //
-                        .doOnNext(response -> log.info("Diff service - {}", response.toString())));
+                        .doOnNext(response -> log.info("Diff service - {}", response)));
     }
 }
