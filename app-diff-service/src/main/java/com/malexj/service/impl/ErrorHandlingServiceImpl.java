@@ -2,7 +2,7 @@ package com.malexj.service.impl;
 
 import com.malexj.exception.NoSuchBillException;
 import com.malexj.model.request.BillRequest;
-import com.malexj.service.CallableService;
+import com.malexj.service.AsyncService;
 import com.malexj.service.ErrorHandlingService;
 import com.malexj.service.StorageService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ import reactor.core.publisher.Mono;
 public class ErrorHandlingServiceImpl implements ErrorHandlingService {
 
     private final StorageService storageService;
-    private final CallableService callableService;
+    private final AsyncService asyncService;
 
     @Override
     public void handleNewBillInRequest(BillRequest request, Throwable error) {
         if (error instanceof NoSuchBillException) {
-            callableService.execute(() -> saveNewBillInDatabase(request));
+            asyncService.execute(() -> saveNewBillInDatabase(request));
         }
     }
 

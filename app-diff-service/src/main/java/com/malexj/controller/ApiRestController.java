@@ -5,7 +5,6 @@ import com.malexj.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -17,16 +16,16 @@ import reactor.core.publisher.Mono;
 public class ApiRestController {
 
     private final StorageService storageService;
-    private final CallableService callableService;
+    private final AsyncService asyncService;
     private final BillComparisonService comparisonService;
     private final NotificationService notificationService;
     private final ErrorHandlingService errorHandlingService;
     private final BillVerificationService verificationService;
 
     @PostMapping("/diff")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Mono<ResponseEntity<Object>> diff(@RequestBody BillRequest request) {
-        callableService.execute(() -> //
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> diff(@RequestBody BillRequest request) {
+        asyncService.execute(() -> //
                 storageService.findBillByNumber(request.getNumber()) //
                         .flatMap(verificationService::verifyBillResponse) //
                         .flatMap(bill -> comparisonService.compareBillStatuses(request, bill)) //
@@ -34,6 +33,6 @@ public class ApiRestController {
                         .doOnError(error -> errorHandlingService.handleNewBillInRequest(request, error)) //
                         .onErrorResume(errorHandlingService::suppressNoSuchBillException) //
                         .subscribe());
-        return Mono.empty().map(ResponseEntity::ok);
+        return Mono.empty();
     }
 }

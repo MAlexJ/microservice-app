@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,7 +37,7 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
                 .uri(buildUri(Map.of("number", number))) //
                 .retrieve()//
                 .bodyToMono(BillResponse.class) //
-                .doOnNext(response -> log.info("Response " + response));
+                .doOnNext(response -> log.info("Determine difference for: " + Optional.ofNullable(response.getEmbedded())));
     }
 
     @Override

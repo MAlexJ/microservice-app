@@ -1,6 +1,6 @@
 package com.malexj.service.impl;
 
-import com.malexj.service.CallableService;
+import com.malexj.service.AsyncService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -8,7 +8,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.concurrent.Callable;
 
 @Service
-public class CallableServiceImpl implements CallableService {
+public class AsyncServiceImpl implements AsyncService {
 
     @Override
     public <T> void execute(Callable<T> task) {

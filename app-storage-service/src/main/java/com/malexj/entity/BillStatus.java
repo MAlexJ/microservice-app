@@ -3,6 +3,8 @@ package com.malexj.entity;
 import com.querydsl.core.annotations.QueryEntity;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -23,5 +25,7 @@ public class BillStatus {
 
     @ManyToOne
     @JoinColumn(name = "bill_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Bill bill;
 }
