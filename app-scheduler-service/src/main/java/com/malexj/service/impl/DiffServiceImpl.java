@@ -3,6 +3,7 @@ package com.malexj.service.impl;
 import com.malexj.mapper.BilDtoMapper;
 import com.malexj.model.request.BillRequest;
 import com.malexj.model.response.BillResponse;
+import com.malexj.service.AbstractService;
 import com.malexj.service.DiffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,26 +12,24 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
 import java.util.Optional;
 
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DiffServiceImpl implements DiffService {
+public class DiffServiceImpl extends AbstractService implements DiffService {
 
     /**
      * diff-service REST API
      */
     @Value("${diff-service.base-url}")
-    private String diffApiBaseUrl;
+    private String baseUrl;
 
     @Value("${diff-service.endpoint}")
-    private String diffApiEndpoint;
+    private String endpoint;
 
     private final WebClient webClient;
 
@@ -38,9 +37,9 @@ public class DiffServiceImpl implements DiffService {
 
 
     @Override
-    public Mono<ResponseEntity<Void>> handleDifferencesBillStatuses(BillResponse response) {
+    public Mono<ResponseEntity<Void>> handleDifferences(BillResponse response) {
         return webClient.post() //
-                .uri(buildUri()) //
+                .uri(buildUri(baseUrl, endpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildBody(response)) //
                 .retrieve() //
@@ -50,12 +49,5 @@ public class DiffServiceImpl implements DiffService {
 
     private BillRequest buildBody(BillResponse billResponse) {
         return mapper.responseMapper(billResponse);
-    }
-
-    private URI buildUri() {
-        return UriComponentsBuilder.fromUriString(diffApiBaseUrl) //
-                .path(diffApiEndpoint) //
-                .build() //
-                .toUri();
     }
 }

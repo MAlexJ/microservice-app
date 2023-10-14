@@ -31,7 +31,7 @@ public class SchedulerService {
         htmlService.fetchSearchBill() //
                 .flatMapMany(this::createBillRequest) //
                 .flatMap(htmlService::fetchBillStatuses) //
-                .flatMap(diffService::handleDifferencesBillStatuses) //
+                .flatMap(diffService::handleDifferences) //
                 .doOnError(throwable -> log.error(throwable.getMessage())) //
                 .subscribe();
     }

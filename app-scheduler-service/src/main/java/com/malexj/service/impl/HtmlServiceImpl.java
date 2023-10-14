@@ -4,6 +4,7 @@ import com.malexj.model.request.BillRequest;
 import com.malexj.model.request.SearchRequest;
 import com.malexj.model.response.BillResponse;
 import com.malexj.model.response.SearchResponse;
+import com.malexj.service.AbstractService;
 import com.malexj.service.HtmlService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class HtmlServiceImpl implements HtmlService {
+public class HtmlServiceImpl extends AbstractService implements HtmlService {
 
 
     /**
@@ -41,10 +41,10 @@ public class HtmlServiceImpl implements HtmlService {
      * REST API
      */
     @Value("${html-service.base-url}")
-    private String htmlApiBaseUrl;
+    private String baseUrl;
 
     @Value("${html-service.endpoint.bills}")
-    private String findBillsEndpoint;
+    private String billsEndpoint;
 
     @Value("${html-service.endpoint.searchResults}")
     private String searchResultsEndpoint;
@@ -54,7 +54,7 @@ public class HtmlServiceImpl implements HtmlService {
     @Override
     public Mono<SearchResponse> fetchSearchBill() {
         return webClient.post() //
-                .uri(UriComponentsBuilder.fromUriString(htmlApiBaseUrl).path(searchResultsEndpoint).build().toUri()) //
+                .uri(buildUri(baseUrl, searchResultsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildSearchRequest()) //
                 .retrieve() //
@@ -66,7 +66,7 @@ public class HtmlServiceImpl implements HtmlService {
     @Override
     public Mono<BillResponse> fetchBillStatuses(BillRequest request) {
         return webClient.post() //
-                .uri(UriComponentsBuilder.fromUriString(htmlApiBaseUrl).path(findBillsEndpoint).build().toUri()) //
+                .uri(buildUri(baseUrl, billsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(request) //
                 .retrieve() //

@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface DiffService {
 
-    Mono<ResponseEntity<Void>> handleDifferencesBillStatuses(BillResponse billResponse);
+    Mono<ResponseEntity<Void>> handleDifferences(BillResponse billResponse);
 }
