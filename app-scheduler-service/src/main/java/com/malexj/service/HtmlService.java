@@ -8,9 +8,9 @@ import reactor.core.publisher.Mono;
 
 public interface HtmlService {
 
-    Mono<SearchResponse> fetchSearchBill();
+    Mono<SearchResponse> fetchBillSearch();
 
     Mono<BillResponse> fetchBillStatuses(BillRequest request);
 
-    Flux<BillRequest> createBillRequest(SearchResponse response);
+    Flux<BillRequest> convertSearchResponse(SearchResponse response);
 }

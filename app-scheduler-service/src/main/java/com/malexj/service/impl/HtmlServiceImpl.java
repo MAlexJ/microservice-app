@@ -57,7 +57,7 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     private final BilDtoMapper mapper;
 
     @Override
-    public Mono<SearchResponse> fetchSearchBill() {
+    public Mono<SearchResponse> fetchBillSearch() {
         return webClient.post() //
                 .uri(buildUri(baseUrl, searchResultsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
@@ -80,7 +80,7 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     }
 
     @Override
-    public Flux<BillRequest> createBillRequest(SearchResponse response) {
+    public Flux<BillRequest> convertSearchResponse(SearchResponse response) {
         List<BillRequest> bills = response.getBills().stream() //
                 .map(mapper::responseMapper) //
                 .collect(Collectors.toList());

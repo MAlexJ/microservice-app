@@ -19,10 +19,10 @@ public class SchedulerService {
 
     @Scheduled(cron = "${scheduled.task.job.cron}")
     public void executionScheduledTask() {
-        htmlService.fetchSearchBill() //
-                .flatMapMany(htmlService::createBillRequest) //
+        htmlService.fetchBillSearch() //
+                .flatMapMany(htmlService::convertSearchResponse) //
                 .flatMap(htmlService::fetchBillStatuses) //
-                .flatMap(diffService::handleDifferences) //
+                .flatMap(diffService::processingBillStatusDifferences) //
                 .doOnError(throwable -> log.error(throwable.getMessage())) //
                 .subscribe();
     }
