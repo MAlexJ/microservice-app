@@ -1,25 +1,54 @@
-## Storage service
+## Bill storage service
 
-Description: <br>
-1. Add ```.env``` file in root directory
-2. Add ```env_variables```:
+The service provides simple CRUD operations to access tables Bills and their statuses <br>
+Relationship: one-to-many
 
-### POSTGRESQL configuration
+Note: 
+DATA REST framework specifics:<br>
+entity id is href link:
+
+example POST create bill status:
 ```java
-- APP_STORAGE_SERVICE_POSTGRESQL_HOSTNAME=
-- APP_STORAGE_SERVICE_POSTGRESQL_DBNAME=
-- APP_STORAGE_SERVICE_POSTGRESQL_USER=
-- APP_STORAGE_SERVICE_CLOUD_POSTGRESQL_PASSWORD=
+POST /billStatuses HTTP/1.1
+Host: localhost:8087
+Location: http://localhost:8087/bills/3
+Content-Type: application/json
+Content-Length: 125
+{
+    "data": "2023-09-05",
+    "status": "Надано для ознайомленняfghjkl",
+    "bill": "http://localhost:8087/bills/13"
+}
+```
+'bill' field is href to bill entity, it's not id in table
+
+### Service configuration
+
+#### Spring boot 3
+```java
+application port:
+APP_STORAGE_SERVICE_PORT - app-storage-server port
 ```
 
-### Spring Data REST
+#### POSTGRESQL configuration
+```java
+spring datasource:
+APP_STORAGE_SERVICE_POSTGRESQL_HOSTNAME
+APP_STORAGE_SERVICE_POSTGRESQL_DBNAME 
+APP_STORAGE_SERVICE_POSTGRESQL_USER 
+APP_STORAGE_SERVICE_POSTGRESQL_PASSWORD
+```
+
+### Info
+
+#### Spring Data REST
 
 1. Issue with POST nested entities (OneToMany)
 How to POST nested entities with Spring Data REST
 link: https://stackoverflow.com/questions/24569399/how-to-post-nested-entities-with-spring-data-rest
 
 
-### QueryQSL (Web Support)
+#### QueryQSL (Web Support)
 link: https://www.baeldung.com/rest-api-search-querydsl-web-in-spring-data-jpa
 
 Steps:
@@ -51,7 +80,7 @@ And here’s how a potential response would be structure:
 ]
 ```
 
-### Liquibase
+#### Liquibase
 
 Link: https://auth0.com/blog/integrating-spring-data-jpa-postgresql-liquibase/ <br>
 
@@ -88,25 +117,5 @@ databaseChangeLog:
             tableName: bill
 ```
 
-### Hibernate One to Many
+#### Hibernate One to Many
 link: https://www.baeldung.com/hibernate-one-to-many
-
-
-......................
-
-### Serverless Postgres DB
-
-link to resource: https://neon.tech/ <br><br>
-
-#### How to connect from Spring Data
-Spring Data relies on JDBC and Postgres drivers to connect to Postgres databases. <br>
-If you are starting your project with Spring Initializr or connecting from an existing Spring Data project,
-ensure that the PostgreSQL database driver dependency is installed. <br>
-
-Connecting from a Spring Data project requires specifying the datasource URL in <br>
-<code>application.properties</code> file, as shown in the following example:
-<br>
-
-```java 
-spring.datasource.url=jdbc:postgresql://[hostname]/[dbname]?user=[user]&password=[password] 
-```
