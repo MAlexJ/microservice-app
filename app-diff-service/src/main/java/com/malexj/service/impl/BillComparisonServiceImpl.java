@@ -10,9 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,7 +26,20 @@ public class BillComparisonServiceImpl implements BillComparisonService {
             log.info("No difference in bill statuses found");
             return Mono.empty();
         }
-        return Mono.just(buildDiffRequest(request, new ArrayList<>(diff)));
+        return Mono.just(buildDiffRequest(request, buildDiffList(extractHrefId(bill), diff)));
+    }
+
+    private String extractHrefId(Bill bill) {
+        return Optional.ofNullable(bill.getSelfLink())
+                .map(Bill.Link::getSelf)
+                .map(Bill.Self::getHref)
+                .orElseThrow(() -> new RuntimeException("bill href link not found"));
+    }
+
+    private static List<BillStatus> buildDiffList(String link, Set<BillStatus> diff) {
+        return diff.stream() //
+                .map(billStatus -> billStatus.addBillLink(link)) //
+                .collect(Collectors.toList());
     }
 
     private BillDiffRequest buildDiffRequest(BillRequest request, List<BillStatus> diff) {

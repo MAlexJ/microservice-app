@@ -28,7 +28,7 @@ public class ErrorHandlingServiceImpl implements ErrorHandlingService {
 
     private Disposable saveNewBillInDatabase(BillRequest request) {
         return storageService.save(request) //
-                .doOnNext(response -> log.info("Bill - {} has been successfully saved in database.", response.getEmbedded())) //
+                .doOnNext(response -> log.info("Bill - {} has been successfully saved in database.", request.getNumber())) //
                 .subscribe();
     }
 

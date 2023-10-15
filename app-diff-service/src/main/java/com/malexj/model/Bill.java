@@ -9,6 +9,9 @@ import java.util.List;
 @Data
 public class Bill {
 
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("link")
     private String link;
 
@@ -23,4 +26,32 @@ public class Bill {
 
     @JsonProperty("statuses")
     private List<BillStatus> statuses;
+
+    /**
+     * Example:
+     * "_links":
+     * {
+     * "self":{
+     * "href":"http://localhost:8087/bills/13"
+     * },
+     * "bill":{
+     * "href":"http://localhost:8087/bills/13"
+     * }
+     * }
+     */
+    @JsonProperty("_links")
+    private Link selfLink;
+
+    @Data
+    public static class Link {
+        @JsonProperty("self")
+        private Self self;
+    }
+
+    @Data
+    public static class Self {
+        @JsonProperty("href")
+        private String href;
+    }
+
 }

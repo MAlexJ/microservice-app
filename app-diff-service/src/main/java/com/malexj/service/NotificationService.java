@@ -8,6 +8,6 @@ public interface NotificationService {
     /**
      * Send notification to mail-service about changing the status of bill
      */
-    Mono<Object> sendNotification(BillDiffRequest request);
+    Mono<BillDiffRequest> sendNotification(BillDiffRequest request);
 
 }

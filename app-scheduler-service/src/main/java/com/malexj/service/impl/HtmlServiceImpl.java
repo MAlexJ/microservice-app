@@ -1,5 +1,6 @@
 package com.malexj.service.impl;
 
+import com.malexj.mapper.BilDtoMapper;
 import com.malexj.model.request.BillRequest;
 import com.malexj.model.request.SearchRequest;
 import com.malexj.model.response.BillResponse;
@@ -12,10 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -51,6 +54,8 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
 
     private final WebClient webClient;
 
+    private final BilDtoMapper mapper;
+
     @Override
     public Mono<SearchResponse> fetchSearchBill() {
         return webClient.post() //
@@ -72,6 +77,14 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
                 .retrieve() //
                 .bodyToMono(BillResponse.class) //
                 .doOnNext(response -> log.info("Statuses: " + response.getStatuses()));
+    }
+
+    @Override
+    public Flux<BillRequest> createBillRequest(SearchResponse response) {
+        List<BillRequest> bills = response.getBills().stream() //
+                .map(mapper::responseMapper) //
+                .collect(Collectors.toList());
+        return Flux.fromIterable(bills);
     }
 
     private SearchRequest buildSearchRequest() {

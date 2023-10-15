@@ -5,6 +5,7 @@ storage-service:
   base-url: ${APP_STORAGE_SERVICE_BASE_URL:http://localhost:8087}
   endpoint:
     bills: ${APP_STORAGE_SERVICE_BILL_ENDPOINT:/bills}
+    bill-statuses: ${APP_STORAGE_SERVICE_BILL_STATUSES_ENDPOINT:/billStatuses}
 
 mail-service:
   base-url: ${APP_MAIL_SERVICE_URL:http://localhost:8089}

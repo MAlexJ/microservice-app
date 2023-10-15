@@ -30,6 +30,7 @@ public class DiffRestController {
                         .flatMap(verificationService::verifyBillResponse) //
                         .flatMap(bill -> comparisonService.compareBillStatuses(request, bill)) //
                         .flatMap(notificationService::sendNotification) //
+                        .flatMapMany(storageService::saveBillStatuses) //
                         .doOnError(error -> errorHandlingService.handleNewBillInRequest(request, error)) //
                         .onErrorResume(errorHandlingService::suppressNoSuchBillException) //
                         .subscribe());

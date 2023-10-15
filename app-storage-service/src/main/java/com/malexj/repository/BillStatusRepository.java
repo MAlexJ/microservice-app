@@ -1,8 +1,6 @@
 package com.malexj.repository;
 
-import com.malexj.entity.Bill;
 import com.malexj.entity.BillStatus;
-import com.malexj.entity.QBill;
 import com.malexj.entity.QBillStatus;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;

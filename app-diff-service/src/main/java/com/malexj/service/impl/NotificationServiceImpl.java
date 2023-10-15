@@ -39,14 +39,15 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
     private final WebClient webClient;
 
     @Override
-    public Mono<Object> sendNotification(BillDiffRequest request) {
+    public Mono<BillDiffRequest> sendNotification(BillDiffRequest request) {
         log.info("Send diff to notification service");
         return webClient.post() //
                 .uri(buildUri(baseUrl, endpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildNotificationRequest(request)) //
                 .retrieve() //
-                .bodyToMono(Object.class);
+                .bodyToMono(Void.class) //
+                .then(Mono.just(request));
     }
 
     private EmailRequest buildNotificationRequest(BillDiffRequest request) {
@@ -56,8 +57,8 @@ public class NotificationServiceImpl extends AbstractService implements Notifica
                 .orElse(defaultRecipient);
         return EmailRequest.builder() //
                 .toEmail(recipientEmail) //
-                .title(fetchMessage(request)) //
-                .message(fetchTitle(request.getNumber())) //
+                .title(fetchTitle(request.getNumber())) //
+                .message(fetchMessage(request)) //
                 .build();
     }
 
