@@ -1,0 +1,15 @@
+server:
+  port: ${APP_USER_SUBSCRIPTION_SERVICE_SERVER_PORT:8090}
+
+spring:
+  data:
+    mongodb:
+      uri: ${APP_USER_SUBSCRIPTION_SERVICE_MONGODB_URI:uri}
+      database: ${APP_USER_SUBSCRIPTION_SERVICE_MONGODB_DATABASE:user-subscription-db}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:false}

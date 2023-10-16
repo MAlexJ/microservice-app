@@ -25,13 +25,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StorageServiceImpl extends AbstractService implements StorageService {
 
-    @Value("${storage-service.base-url}")
+    @Value("${bill-storage-service.base-url}")
     private String baseUrl;
 
-    @Value("${storage-service.endpoint.bills}")
+    @Value("${bill-storage-service.endpoint.bills}")
     private String billsEndpoint;
 
-    @Value("${storage-service.endpoint.bill-statuses}")
+    @Value("${bill-storage-service.endpoint.bill-statuses}")
     private String billStatusesEndpoint;
 
     private final WebClient webClient;
