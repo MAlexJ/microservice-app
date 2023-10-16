@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 
 @Data
-@EqualsAndHashCode(exclude = {"billId"})
+@EqualsAndHashCode(exclude = {"billLink"})
 public class BillStatus {
 
     @JsonProperty("bill")
@@ -19,7 +19,6 @@ public class BillStatus {
 
     @JsonProperty("status")
     private String status;
-
 
 
     public BillStatus addBillLink(String link) {
