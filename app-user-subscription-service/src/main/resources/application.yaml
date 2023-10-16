@@ -6,6 +6,7 @@ spring:
     mongodb:
       uri: ${APP_USER_SUBSCRIPTION_SERVICE_MONGODB_URI:uri}
       database: ${APP_USER_SUBSCRIPTION_SERVICE_MONGODB_DATABASE:user-subscription-db}
+      auto-index-creation: true
 
 management:
   endpoints:
