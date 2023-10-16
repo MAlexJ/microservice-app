@@ -1,4 +1,4 @@
-package com.malexj.model.api;
+package com.malexj.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,14 +6,14 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class SubscriptionRequest {
+public class SubscriptionDto {
 
     @JsonProperty("active")
     private boolean isActive;
 
     @JsonProperty("user")
-    private UserRequest user;
+    private UserDto user;
 
-    @JsonProperty("billNumbers")
-    private List<String> billNumbers;
+    @JsonProperty("bills")
+    private List<BillDto> bills;
 }

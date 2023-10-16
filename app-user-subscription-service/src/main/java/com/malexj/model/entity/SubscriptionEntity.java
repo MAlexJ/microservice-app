@@ -1,24 +1,29 @@
 package com.malexj.model.entity;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Document(collection = "subscription")
-public class Subscription {
+public class SubscriptionEntity {
 
-    @Id
+    @MongoId
     private String id;
 
-    @Field(name = "isActive")
+    @Field(name = "active")
     private boolean isActive;
 
-    private User user;
+    private UserEntity user;
 
-    private List<String> billNumbers;
+    private List<BillEntity> bills;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
 
 }
