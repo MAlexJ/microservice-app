@@ -7,6 +7,7 @@ Description: <br>
 - Click to <button> App password </button> and create new one
 - Firstly enter App name like: "SpringBootDemoApp" -> enter <button> Generate </button>
 - Secondary copy App password and save it smw
+
 2. ### Config your application.properties file:
 ## properties configuration
 ```
