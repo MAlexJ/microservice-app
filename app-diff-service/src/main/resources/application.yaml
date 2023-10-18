@@ -1,6 +1,10 @@
 server:
   port: ${APP_DIFF_SERVICE_PORT:8088}
 
+spring:
+  application:
+    name: app-diff-service
+
 bill-storage-service:
   base-url: ${APP_BILL_STORAGE_SERVICE_BASE_URL:http://localhost:8087}
   endpoint:
@@ -17,3 +21,10 @@ mail-service:
 
   test:
     default-recipient: ${APP_MAIL_SERVICE_DEFAULT_RECIPIENT:test_test@gmail.com}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}

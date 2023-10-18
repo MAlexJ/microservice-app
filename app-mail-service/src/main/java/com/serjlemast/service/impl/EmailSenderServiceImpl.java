@@ -19,7 +19,8 @@ import org.springframework.stereotype.Service;
 public class EmailSenderServiceImpl implements EmailSenderService {
 
     @Value("${app-mail-senderFrom}")
-    private String mailFrom;
+    private String mailFrom = "";
+
 
     private final JavaMailSender mailSender;
 

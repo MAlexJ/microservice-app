@@ -1,6 +1,10 @@
 server:
   port: ${APP_SCHEDULER_SERVICE_PORT:8086}
 
+spring:
+  application:
+    name: app-scheduler-service
+
 scheduled:
   task:
     job:
@@ -21,4 +25,4 @@ management:
     web:
       exposure:
         include: '*'
-    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:false}
+    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}

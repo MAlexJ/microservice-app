@@ -1,9 +1,13 @@
 server:
   port: ${APP_HTML_SERVICE_PORT:8085}
 
+spring:
+  application:
+    name: app-html-parser-service
+
 management:
   endpoints:
     web:
       exposure:
         include: '*'
-    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:false}
+    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}

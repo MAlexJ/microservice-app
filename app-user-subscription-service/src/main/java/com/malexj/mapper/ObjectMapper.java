@@ -13,6 +13,7 @@ public interface ObjectMapper {
 
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
     SubscriptionEntity convertDtoToEntity(SubscriptionDto dto);
 
 }
