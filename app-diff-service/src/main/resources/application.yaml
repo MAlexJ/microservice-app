@@ -6,7 +6,8 @@ spring:
     name: app-diff-service
 
 bill-storage-service:
-  base-url: ${APP_BILL_STORAGE_SERVICE_BASE_URL:http://localhost:8087}
+  application:
+    name: ${APP_BILL_STORAGE_SERVICE_APPLICATION_NAME:app-storage-service}
   endpoint:
     bills: ${APP_BILL_STORAGE_SERVICE_BILL_ENDPOINT:/bills}
     bill-statuses: ${APP_BILL_STORAGE_SERVICE_BILL_STATUSES_ENDPOINT:/billStatuses}
@@ -28,3 +29,13 @@ management:
       exposure:
         include: '*'
     enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    #register eureka as application
+    register-with-eureka: true
+    #fetch all thing, we can get applications here
+    fetch-registry: true
+    #also you can specify the instance renewal time.

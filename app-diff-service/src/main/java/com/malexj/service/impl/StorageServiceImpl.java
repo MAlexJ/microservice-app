@@ -5,9 +5,12 @@ import com.malexj.model.request.BillRequest;
 import com.malexj.model.response.BillResponse;
 import com.malexj.service.AbstractService;
 import com.malexj.service.StorageService;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,8 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StorageServiceImpl extends AbstractService implements StorageService {
 
-    @Value("${bill-storage-service.base-url}")
-    private String baseUrl;
+    @Value("${bill-storage-service.application.name}")
+    private String storageApplicationName;
 
     @Value("${bill-storage-service.endpoint.bills}")
     private String billsEndpoint;
@@ -34,7 +37,17 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
     @Value("${bill-storage-service.endpoint.bill-statuses}")
     private String billStatusesEndpoint;
 
+    @Lazy
+    private final EurekaClient eurekaClient;
+
     private final WebClient webClient;
+
+
+    private String discoveryStorageServiceUrl() {
+        InstanceInfo nextServerFromEureka = eurekaClient.getNextServerFromEureka(storageApplicationName, false);
+        return nextServerFromEureka.getHomePageUrl();
+    }
+
 
     @Override
     public Mono<BillResponse> findBillByNumber(String number) {
@@ -48,7 +61,7 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
     @Override
     public Mono<BillResponse> save(BillRequest request) {
         return webClient.post() //
-                .uri(buildUri(baseUrl, billsEndpoint)) //
+                .uri(buildUri(discoveryStorageServiceUrl(), billsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(request) //
                 .retrieve() //
@@ -58,21 +71,18 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
 
     @Override
     public Flux<String> saveBillStatuses(BillDiffRequest request) {
-        return Flux.fromIterable(request.getDiffStatuses())
-                .flatMap(billStatus -> {
-                    return webClient.post() //
-                            .uri(buildUri(baseUrl, billStatusesEndpoint)) //
-                            .contentType(MediaType.APPLICATION_JSON) //
-                            .bodyValue(billStatus) //
-                            .retrieve() //
-                            .bodyToMono(String.class) //
-                            .doOnNext(response -> log.info("Save bill status: " + response));
-                });
+        return Flux.fromIterable(request.getDiffStatuses()).flatMap(billStatus -> webClient.post() //
+                .uri(buildUri(discoveryStorageServiceUrl(), billStatusesEndpoint)) //
+                .contentType(MediaType.APPLICATION_JSON) //
+                .bodyValue(billStatus) //
+                .retrieve() //
+                .bodyToMono(String.class) //
+                .doOnNext(response -> log.info("Save bill status: " + response)));
     }
 
 
     private URI buildUri(Map<String, String> queryParams) {
-        UriComponentsBuilder uriBuilder = buildUriComponents(baseUrl, billsEndpoint);
+        UriComponentsBuilder uriBuilder = buildUriComponents(discoveryStorageServiceUrl(), billsEndpoint);
         if (!CollectionUtils.isEmpty(queryParams)) {
             queryParams.forEach(uriBuilder::queryParam);
             uriBuilder.pathSegment();
