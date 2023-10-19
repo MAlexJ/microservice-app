@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'microservice-app'
-include 'app-html-parser-service', 'app-scheduler-service', 'app-bill-storage-service', 'app-diff-service', 'app-mail-service', 'app-user-subscription-service'
+include 'app-html-parser-service', 'app-scheduler-service', 'app-bill-storage-service', 'app-diff-service', 'app-mail-service', 'app-user-subscription-service', 'app-exeption-handler-service'
