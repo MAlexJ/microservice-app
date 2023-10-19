@@ -13,6 +13,9 @@ to which the user has subscribed.
 - gradle 8.3 + 
 - Spring boot 3
 
+### Project structure
+Discovery service - implements the definition of API services in microservices environment
+
 ### minimal settings to start project
 1. Create .env file in root of the project 
 2. Add env variables to it
