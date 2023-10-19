@@ -11,13 +11,15 @@ scheduled:
       cron: ${APP_SCHEDULER_SERVICE_CRONE:0/10 * * * * *}
 
 html-service:
-  base-url: ${APP_HTML_SERVICE_BASE_URL:http://localhost:8085}
+  application:
+    name: ${APP_HTML_SERVICE_APPLICATION_NAME:app-html-parser-service}
   endpoint:
     bills: ${APP_HTML_SERVICE_FIND_BILLS_ENDPOINT:/v1/bills}
     searchResults: ${APP_HTML_SERVICE_SEARCH_ENDPOINT:/v1/searchResults}
 
 diff-service:
-  base-url: ${APP_DIFF_SERVICE_BASE_URL:http://localhost:8088}
+  application:
+    name: ${APP_DIFF_SERVICE_APPLICATION_NAME:app-diff-service}
   endpoint: ${APP_DIFF_SERVICE_ENDPOINT:/v1/diff}
 
 management:

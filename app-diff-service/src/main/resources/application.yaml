@@ -13,7 +13,8 @@ bill-storage-service:
     bill-statuses: ${APP_BILL_STORAGE_SERVICE_BILL_STATUSES_ENDPOINT:/billStatuses}
 
 mail-service:
-  base-url: ${APP_MAIL_SERVICE_URL:http://localhost:8089}
+  application:
+    name: ${APP_MAIL_SERVICE_APPLICATION_NAME:app-mail-service}
   endpoint:
     send-email: /v1/emails
   template:
@@ -34,8 +35,5 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    #register eureka as application
     register-with-eureka: true
-    #fetch all thing, we can get applications here
     fetch-registry: true
-    #also you can specify the instance renewal time.

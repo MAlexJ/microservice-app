@@ -29,7 +29,7 @@ import java.util.Optional;
 public class StorageServiceImpl extends AbstractService implements StorageService {
 
     @Value("${bill-storage-service.application.name}")
-    private String storageApplicationName;
+    private String virtualHostname;
 
     @Value("${bill-storage-service.endpoint.bills}")
     private String billsEndpoint;
@@ -43,8 +43,8 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
     private final WebClient webClient;
 
 
-    private String discoveryStorageServiceUrl() {
-        InstanceInfo nextServerFromEureka = eurekaClient.getNextServerFromEureka(storageApplicationName, false);
+    private String discoveryServiceUrl() {
+        InstanceInfo nextServerFromEureka = eurekaClient.getNextServerFromEureka(virtualHostname, false);
         return nextServerFromEureka.getHomePageUrl();
     }
 
@@ -61,7 +61,7 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
     @Override
     public Mono<BillResponse> save(BillRequest request) {
         return webClient.post() //
-                .uri(buildUri(discoveryStorageServiceUrl(), billsEndpoint)) //
+                .uri(buildUri(discoveryServiceUrl(), billsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(request) //
                 .retrieve() //
@@ -72,7 +72,7 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
     @Override
     public Flux<String> saveBillStatuses(BillDiffRequest request) {
         return Flux.fromIterable(request.getDiffStatuses()).flatMap(billStatus -> webClient.post() //
-                .uri(buildUri(discoveryStorageServiceUrl(), billStatusesEndpoint)) //
+                .uri(buildUri(discoveryServiceUrl(), billStatusesEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(billStatus) //
                 .retrieve() //
@@ -82,7 +82,7 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
 
 
     private URI buildUri(Map<String, String> queryParams) {
-        UriComponentsBuilder uriBuilder = buildUriComponents(discoveryStorageServiceUrl(), billsEndpoint);
+        UriComponentsBuilder uriBuilder = buildUriComponents(discoveryServiceUrl(), billsEndpoint);
         if (!CollectionUtils.isEmpty(queryParams)) {
             queryParams.forEach(uriBuilder::queryParam);
             uriBuilder.pathSegment();

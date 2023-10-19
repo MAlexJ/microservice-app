@@ -7,7 +7,7 @@ import com.malexj.model.response.BillResponse;
 import com.malexj.model.response.SearchResponse;
 import com.malexj.service.AbstractService;
 import com.malexj.service.HtmlService;
-import lombok.RequiredArgsConstructor;
+import com.netflix.discovery.EurekaClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -22,12 +22,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class HtmlServiceImpl extends AbstractService implements HtmlService {
 
 
     /**
-     * init data
+     * Note: Hardcode init data
      */
     private static final String SEARCH_BILL_URL = "https://itd.rada.gov.ua/billInfo/Bills/searchResults";
     private final static Map<String, String> FORM_URLENCODED_DATA = Map.of( //
@@ -41,10 +40,10 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     );
 
     /**
-     * REST API
+     * html-service REST API
      */
-    @Value("${html-service.base-url}")
-    private String baseUrl;
+    @Value("${html-service.application.name}")
+    private String virtualHostname;
 
     @Value("${html-service.endpoint.bills}")
     private String billsEndpoint;
@@ -52,14 +51,15 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     @Value("${html-service.endpoint.searchResults}")
     private String searchResultsEndpoint;
 
-    private final WebClient webClient;
+    public HtmlServiceImpl(EurekaClient eurekaClient, WebClient webClient, BilDtoMapper mapper) {
+        super(eurekaClient, webClient, mapper);
+    }
 
-    private final BilDtoMapper mapper;
 
     @Override
     public Mono<SearchResponse> fetchBillSearch() {
         return webClient.post() //
-                .uri(buildUri(baseUrl, searchResultsEndpoint)) //
+                .uri(buildUri(discoveryServiceUrl(virtualHostname), searchResultsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildSearchRequest()) //
                 .retrieve() //
@@ -71,7 +71,7 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     @Override
     public Mono<BillResponse> fetchBillStatuses(BillRequest request) {
         return webClient.post() //
-                .uri(buildUri(baseUrl, billsEndpoint)) //
+                .uri(buildUri(discoveryServiceUrl(virtualHostname), billsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(request) //
                 .retrieve() //
