@@ -1,6 +1,7 @@
 package com.malexj.service.impl;
 
 import com.malexj.exception.NoSuchBillException;
+import com.malexj.model.request.BillDiffRequest;
 import com.malexj.model.request.BillRequest;
 import com.malexj.service.AsyncService;
 import com.malexj.service.ErrorHandlingService;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -20,10 +22,16 @@ public class ErrorHandlingServiceImpl implements ErrorHandlingService {
     private final AsyncService asyncService;
 
     @Override
-    public void handleNewBillInRequest(BillRequest request, Throwable error) {
+    public void handleNewBill(BillRequest request, Throwable error) {
         if (error instanceof NoSuchBillException) {
             asyncService.execute(() -> saveNewBillInDatabase(request));
         }
+    }
+
+
+    @Override
+    public Flux<String> handleNewBillStatuses(BillDiffRequest diffRequest) {
+        return storageService.saveBillStatuses(diffRequest);
     }
 
     private Disposable saveNewBillInDatabase(BillRequest request) {

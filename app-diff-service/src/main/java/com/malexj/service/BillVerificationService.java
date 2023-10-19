@@ -2,12 +2,9 @@ package com.malexj.service;
 
 import com.malexj.exception.NoSuchBillException;
 import com.malexj.model.Bill;
-import com.malexj.model.BillStatus;
 import com.malexj.model.request.BillRequest;
 import com.malexj.model.response.BillResponse;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 public interface BillVerificationService {
 
@@ -15,7 +12,7 @@ public interface BillVerificationService {
      * Verify bill response.
      * If no Bill is found in storage-service response then NoSuchBillException exception is thrown
      * {@link NoSuchBillException} exception will be caught in error handler
-     * {@link ErrorHandlingService#handleNewBillInRequest(BillRequest, Throwable)} and this will mean
+     * {@link ErrorHandlingService#handleNewBill(BillRequest, Throwable)} and this will mean
      * that Bill is new and will be saved in the database by storage-service.
      *
      * @param response - Bill representation

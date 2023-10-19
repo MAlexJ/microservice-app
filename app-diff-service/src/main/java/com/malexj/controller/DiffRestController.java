@@ -15,8 +15,8 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/v1")
 public class DiffRestController {
 
-    private final StorageService storageService;
     private final AsyncService asyncService;
+    private final StorageService storageService;
     private final BillComparisonService comparisonService;
     private final NotificationService notificationService;
     private final ErrorHandlingService errorHandlingService;
@@ -30,8 +30,8 @@ public class DiffRestController {
                         .flatMap(verificationService::verifyBillResponse) //
                         .flatMap(bill -> comparisonService.compareBillStatuses(request, bill)) //
                         .flatMap(notificationService::sendNotification) //
-                        .flatMapMany(storageService::saveBillStatuses) //
-                        .doOnError(error -> errorHandlingService.handleNewBillInRequest(request, error)) //
+                        .flatMapMany(errorHandlingService::handleNewBillStatuses) //
+                        .doOnError(error -> errorHandlingService.handleNewBill(request, error)) //
                         .onErrorResume(errorHandlingService::suppressNoSuchBillException) //
                         .subscribe());
         return Mono.empty();
