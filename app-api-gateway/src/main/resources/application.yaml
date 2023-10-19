@@ -10,6 +10,12 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      routes:
+        - id: app-user-subscription-service
+          uri: lb://app-user-subscription-service
+          predicates:
+            - Path=/v1/subscriptions, /v1/subscriptions/subscribe, /v1/subscriptions/unsubscribe
+            - Method=GET, POST
 
 eureka:
   client:
