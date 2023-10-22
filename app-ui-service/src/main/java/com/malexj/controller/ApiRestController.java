@@ -1,14 +1,32 @@
 package com.malexj.controller;
 
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
 @RequestMapping("/v1")
+@AllArgsConstructor
 public class ApiRestController {
+
+    @Lazy
+    protected final EurekaClient eurekaClient;
+
+    protected final WebClient webClient;
+
+    // "app-api-gateway"
+
+    protected String discoveryServiceUrl() {
+        InstanceInfo nextServerFromEureka = eurekaClient.getNextServerFromEureka("app-api-gateway", false);
+        return nextServerFromEureka.getHomePageUrl();
+    }
 
     @GetMapping("/subscriptions")
     public Mono<ResponseEntity<String>> appSubscriptions() {
@@ -22,8 +40,11 @@ public class ApiRestController {
         if (number.isEmpty()) {
             throw new RuntimeException("bill number should be not null or empty!");
         }
-        String resp = "{\n" + "    \"bills\": [\n" + "        {\n" + "            \"link\": \"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\",\n" + "            \"name\": \"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\n" + "            \"number\": \"9672\",\n" + "            \"registrationDate\": \"2023-09-04\"\n" + "        },\n" + "        {\n" + "            \"link\": \"https://itd.rada.gov.ua/billInfo/Bills/Card/42700\",\n" + "            \"name\": \"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\n" + "            \"number\": \"9672-1\",\n" + "            \"registrationDate\": \"2023-09-05\"\n" + "        },\n" + "        {\n" + "            \"link\": \"https://itd.rada.gov.ua/billInfo/Bills/Card/42755\",\n" + "            \"name\": \"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\n" + "            \"number\": \"9672-2\",\n" + "            \"registrationDate\": \"2023-09-14\"\n" + "        },\n" + "        {\n" + "            \"link\": \"https://itd.rada.gov.ua/billInfo/Bills/Card/42806\",\n" + "            \"name\": \"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\n" + "            \"number\": \"9672-3\",\n" + "            \"registrationDate\": \"2023-09-19\"\n" + "        }\n" + "    ]\n" + "}";
-        return Mono.just(ResponseEntity.ok(resp));
+        Mono<String> request = webClient.get() //
+                .uri(discoveryServiceUrl()) //
+                .retrieve() //
+                .bodyToMono(String.class);
+        return request.map(ResponseEntity::ok);
     }
 
     @PostMapping("/bills")
