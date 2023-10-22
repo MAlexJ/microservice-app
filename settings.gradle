@@ -18,4 +18,5 @@ include 'app-html-parser-service',
         'app-mail-service',
         'app-user-subscription-service',
         'app-discovery-service',
-        'app-api-gateway'
+        'app-api-gateway',
+        'app-ui-service'
