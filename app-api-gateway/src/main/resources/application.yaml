@@ -16,6 +16,11 @@ spring:
           predicates:
             - Path=/v1/subscriptions, /v1/subscriptions/subscribe, /v1/subscriptions/unsubscribe
             - Method=GET, POST
+        - id: app-html-parser-service
+          uri: lb://app-html-parser-service
+          predicates:
+            - Path=/v1/bills/{number}
+            - Method=GET
 
 eureka:
   client:

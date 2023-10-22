@@ -1,18 +1,16 @@
 package com.malex.models.base;
 
 import lombok.Builder;
-import lombok.Getter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @Builder
-@Getter
 public class FormData {
 
     private MultiValueMap<String, String> formData;
 
-    public FormData() {
-        this.formData = new LinkedMultiValueMap<>();
+    public MultiValueMap<String, String> getFormData() {
+        return formData;
     }
 
     /**
@@ -26,6 +24,10 @@ public class FormData {
      * "BillSearchModel.detailView", "false" //
      */
     public static class FormDataBuilder {
+
+        public FormDataBuilder() {
+            formData = new LinkedMultiValueMap<>();
+        }
 
         /* "BillSearchModel.registrationNumber" */
         public FormData.FormDataBuilder registrationNumber(String number) {
