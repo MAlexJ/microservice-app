@@ -3,6 +3,7 @@ package com.malex.controllers;
 import com.malex.mapper.ObjectMapper;
 import com.malex.models.base.Bill;
 import com.malex.models.base.BillStatus;
+import com.malex.models.base.FormData;
 import com.malex.models.request.BillRequest;
 import com.malex.models.request.SearchRequest;
 import com.malex.models.response.BillResponse;
@@ -11,10 +12,7 @@ import com.malex.services.ApiRestService;
 import com.malex.services.HtmlPageParsingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -28,6 +26,52 @@ public class ApiRestController {
     private ObjectMapper mapper;
     private ApiRestService restService;
     private HtmlPageParsingService parsingService;
+
+
+    /**
+     * FORM_URLENCODED_DATA:
+     * "BillSearchModel.registrationNumber", "9672", //
+     * "BillSearchModel.registrationNumberCompareOperation", "2", //
+     * "BillSearchModel.session", "10", //
+     * "BillSearchModel.registrationRangeStart", "", //
+     * "BillSearchModel.registrationRangeEnd", "", //
+     * "BillSearchModel.name", "", //
+     * "BillSearchModel.detailView", "false" //
+     *
+     * @param number     - BillSearchModel.registrationNumber
+     * @param operation  - BillSearchModel.registrationNumberCompareOperation by default - 2
+     * @param session    - BillSearchModel.session by default - 10
+     * @param rangeStart - registrationRangeStart empty by default
+     * @param rangeEnd   - BillSearchModel.registrationRangeEnd empty by default
+     * @param name       - BillSearchModel.name
+     * @param detail     - BillSearchModel.detailView by default - false
+     * @return {@link SearchResponse} response
+     */
+    @GetMapping("/bills/{number}")
+    public Mono<SearchResponse> findBillByNumber(@PathVariable("number") String number, //
+                                                 @RequestParam(value = "operation", defaultValue = "2") String operation, //
+                                                 @RequestParam(value = "session", defaultValue = "10") String session, //
+                                                 @RequestParam(value = "rangeStart", defaultValue = "") String rangeStart, //
+                                                 @RequestParam(value = "rangeEnd", defaultValue = "") String rangeEnd, //
+                                                 @RequestParam(value = "name", defaultValue = "") String name, //
+                                                 @RequestParam(value = "detail", defaultValue = "false") String detail) {
+        FormData formData = FormData.builder() //
+                .registrationNumber(number) //
+                .registrationNumberCompareOperation(operation) //
+                .session(session) //
+                .registrationRangeStart(rangeStart) //
+                .registrationRangeEnd(rangeEnd) //
+                .name(name) //
+                .detailView(detail) //
+                .build();
+        return restService.fetchSearchResult(formData.getFormData()) //
+                .doOnNext(message -> log.info("Processing html page with Html/Jsoup parsing service")) //
+                .flatMapMany(html -> parsingService.processBillSearchResult(html)) //
+                .collectList() //
+                .map(this::buildSearchResponse) //
+                .doOnNext(message -> log.info("Search API response processing completed, response - {}", message));
+    }
+
 
     @PostMapping("/bills")
     public Mono<BillResponse> findBillStatuses(@RequestBody BillRequest request) {

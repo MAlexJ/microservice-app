@@ -5,6 +5,9 @@ spring:
   application:
     name: app-html-parser-service
 
+html:
+  bill-search-url: ${APP_HTML_SERVICE_SEARCH_BILL_URL:"https://itd.rada.gov.ua/billInfo/Bills/searchResults"}
+
 management:
   endpoints:
     web:
