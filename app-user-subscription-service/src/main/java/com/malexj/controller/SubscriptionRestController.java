@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @RestController
 @RequestMapping("/v1/subscriptions")
@@ -42,6 +44,7 @@ public class SubscriptionRestController {
     @PostMapping("/subscribe")
     public Mono<SubscriptionEntity> createSubscription(@RequestBody SubscriptionDto request) {
         SubscriptionEntity subscriptionEntity = mapper.convertDtoToEntity(request);
+        subscriptionEntity.setCreatedDate(LocalDateTime.now());
         return repository.save(subscriptionEntity) //
                 .onErrorResume(ex -> {
                     log.error(ex.getMessage());

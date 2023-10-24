@@ -21,8 +21,6 @@ public class ApiRestController {
 
     protected final WebClient webClient;
 
-    // "app-api-gateway"
-
     protected String discoveryServiceUrl() {
         InstanceInfo nextServerFromEureka = eurekaClient.getNextServerFromEureka("app-api-gateway", false);
         return nextServerFromEureka.getHomePageUrl();

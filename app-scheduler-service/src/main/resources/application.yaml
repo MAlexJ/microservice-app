@@ -8,7 +8,7 @@ spring:
 scheduled:
   task:
     job:
-      cron: ${APP_SCHEDULER_SERVICE_CRONE:0 0/10 * * * *}
+      cron: ${APP_SCHEDULER_SERVICE_CRONE:0/30 * * * * *}
 
 html-service:
   application:
