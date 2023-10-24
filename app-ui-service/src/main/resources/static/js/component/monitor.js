@@ -10,23 +10,23 @@ app.component('monitor', {
         $interval(tick, 1000);
 
         $scope.subscriptions = {}
+        $scope.searchBills = {}
+        $scope.searchBillNumber = ''
+        $scope.user_username = ''
+        $scope.user_email = ''
 
-        // 1. My subscriptions
         restApiFindAllSubscriptions()
 
         function restApiFindAllSubscriptions() {
-            let path = "/subscriptions";
-            RestAPI.get(path)
+            RestAPI.get("/subscriptions")
                 .then(function (response) {
-                    $scope.subscriptions = response.data;
+                    console.log(response.data)
+                    $scope.subscriptions = JSON.parse(JSON.stringify( response.data));
                 }, function (reason) {
                     $scope.error = reason.data
                     alert(reason.data)
                 });
         }
-
-        $scope.searchBillNumber = ''
-        $scope.searchBills = {}
 
         $scope.findBillByNumber = function () {
             if ($scope.searchBillNumber === '') {
@@ -38,7 +38,7 @@ app.component('monitor', {
             $scope.searchBillNumber = ''
             RestAPI.get(path)
                 .then(function (response) {
-                    $scope.searchBills = response.data;
+                    $scope.searchBills = JSON.parse(JSON.stringify( response.data));
                 }, function (reason) {
                     $scope.error = reason.data
                     alert(reason.data)
@@ -47,7 +47,15 @@ app.component('monitor', {
 
         $scope.subscribe = function () {
             let path = "/bills"
-            RestAPI.post(path, $scope.searchBills)
+            let jsRequest = JSON.parse(JSON.stringify({
+                user: {
+                    username: $scope.user_username,
+                    email: $scope.user_email
+                },
+                active: true,
+                bills: $scope.searchBills.bills
+            }))
+            RestAPI.post(path, jsRequest)
                 .then(function (response) {
                     $scope.searchBills = {}
                 }, function (reason) {
@@ -74,12 +82,11 @@ app.component('monitor', {
                   preserveAspectRatio="xMidYMid slice" focusable="false">
                   <rect width="100%" height="100%" fill="cornflowerblue"></rect>
                </svg>
-               Bill monitor 
+               <b>User subscriptions</b>
                <br>
                {{ clock | date:'medium'}}
             </div>
             <div class="card-body">
-               <h5 class="card-title">My subscriptions</h5>
                <div class="table-responsive">
                   <table class="table table-sm">
                      <thead>
@@ -87,6 +94,7 @@ app.component('monitor', {
                            <th scope="col">Id</th>
                            <th scope="col">User</th>
                            <th scope="col">Email</th>
+                           <th scope="col">Bills</th>
                            <th scope="col">Active</th>
                            <th scope="col">Date</th>
                         </tr>
@@ -96,6 +104,9 @@ app.component('monitor', {
                            <td>{{item.id}}</td>
                            <td>{{item.user.username}}</td>
                            <td>{{item.user.email}}</td>
+                           <td>
+                              <div ng-repeat="bill in item.bills track by $index"> number: {{bill.number}}, link: <a ng-href='{{bill.link}}'>{{bill.link}}</div>
+                           </td>
                            <td>{{item.active}}</td>
                            <td>{{item.createdDate | date:'HH:mm:ss'}}</td>
                         </tr>
@@ -115,12 +126,12 @@ app.component('monitor', {
          </button>
          <!-- Modal -->
          <div class="modal fade" 
-                id="staticBackdrop" 
-                data-bs-backdrop="static" 
-                data-bs-keyboard="false" 
-                tabindex="-1" 
-                aria-labelledby="staticBackdropLabel" 
-                aria-hidden="true">
+            id="staticBackdrop" 
+            data-bs-backdrop="static" 
+            data-bs-keyboard="false" 
+            tabindex="-1" 
+            aria-labelledby="staticBackdropLabel" 
+            aria-hidden="true">
             <div class="modal-dialog modal-xl">
                <div class="modal-content">
                   <div class="modal-header">
@@ -137,33 +148,49 @@ app.component('monitor', {
                               id="bill-number">
                         </div>
                         <div class="mb-3">
-                           <label for="message-text" class="col-form-label">Message:</label>
                            <button class="btn btn-primary form-control" 
                               id="find-bill-btn"
                               ng-click="findBillByNumber()">Search</button>
                         </div>
                         <div class="mb-3">
                            <div ng-repeat="item in searchBills.bills track by $index">
-                              <div><input type="checkbox">
-                                  <div>number: {{item.number}} name: {{item.name}} </div>
-<!--                                  <div>link: {{item.link}}</div>-->
-                                  <div>Registration date: {{item.registrationDate}}</div>
+                              <div>
+                                 <input type="checkbox">
+                                 <div>number: {{item.number}} </div>
+                                 <div>name: {{item.name}} </div>
+                                 <div>Registration date: {{item.registrationDate}}</div>
+                              </div>
+                           </div>
+                           <div ng-show="searchBills.bills">
+                              <div class="mb-3">
+                                 <label for="recipient-name" class="col-form-label">Username:</label>
+                                 <input type="text"                                    
+                                    ng-model="user_username" 
+                                    class="form-control" 
+                                    id="bill-number">
+                              </div>
+                              <div class="mb-3">
+                                 <label for="recipient-name" class="col-form-label">Email:</label>
+                                 <input type="text"
+                                    ng-model="user_email" 
+                                    class="form-control" 
+                                    id="bill-number">
                               </div>
                            </div>
                         </div>
                         <div class="mb-3">
                            <button type="button" 
-                                    class="btn btn-primary" 
-                                    data-bs-dismiss="modal"
-                                    ng-click="subscribe()">Subscribe</button>
+                              class="btn btn-primary" 
+                              data-bs-dismiss="modal"
+                              ng-click="subscribe()">Subscribe</button>
                         </div>
                      </form>
                   </div>
                   <div class="modal-footer">
                      <button type="button" 
-                             class="btn btn-secondary" 
-                             data-bs-dismiss="modal"
-                             ng-click="initModalState()">Close</button>
+                        class="btn btn-secondary" 
+                        data-bs-dismiss="modal"
+                        ng-click="initModalState()">Close</button>
                   </div>
                </div>
             </div>

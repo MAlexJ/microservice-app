@@ -1,5 +1,7 @@
 package com.malexj.controller;
 
+import com.malexj.model.SearchBill;
+import com.malexj.model.Subscription;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -27,28 +31,37 @@ public class ApiRestController {
     }
 
     @GetMapping("/subscriptions")
-    public Mono<ResponseEntity<String>> appSubscriptions() {
-        String resp = "[\n" + "    {\n" + "        \"id\": \"653189d3f5e5120cdb241561\",\n" + "        \"user\": {\n" + "            \"username\": \"malex\",\n" + "            \"email\": \"hsh@mz.ck2k\"\n" + "        },\n" + "        \"bills\": null,\n" + "        \"createdDate\": null,\n" + "        \"active\": true\n" + "    },\n" + "    {\n" + "        \"id\": \"65318a7df5e5120cdb241562\",\n" + "        \"user\": {\n" + "            \"username\": \"malex\",\n" + "            \"email\": \"hsh@mz.dssddsdssd\"\n" + "        },\n" + "        \"bills\": null,\n" + "        \"createdDate\": null,\n" + "        \"active\": true\n" + "    }\n" + "]";
-        return Mono.just(ResponseEntity.ok(resp));
+    public Mono<ResponseEntity<List<Subscription>>> appSubscriptions() {
+        return webClient.get() //
+                .uri(discoveryServiceUrl() + "/v1/subscriptions") //
+                .retrieve() //
+                .bodyToFlux(Subscription.class)  //
+                .collectList() //
+                .map(ResponseEntity::ok);
     }
 
 
     @GetMapping("/bills/{number}")
-    public Mono<ResponseEntity<String>> searchBillByNumber(@PathVariable String number) {
+    public Mono<ResponseEntity<SearchBill>> searchBillByNumber(@PathVariable String number) {
         if (number.isEmpty()) {
             throw new RuntimeException("bill number should be not null or empty!");
         }
-        Mono<String> request = webClient.get() //
-                .uri(discoveryServiceUrl()) //
+        return webClient.get() //
+                .uri(discoveryServiceUrl() + "/v1/bills/" + number) //
                 .retrieve() //
-                .bodyToMono(String.class);
-        return request.map(ResponseEntity::ok);
+                .bodyToMono(SearchBill.class) //
+                .map(ResponseEntity::ok);
     }
 
     @PostMapping("/bills")
-    public Mono<ResponseEntity<String>> subscribe(@RequestBody String bills) {
-        log.info(">>>>> Request: " + bills);
-        return Mono.empty();
+    public Mono<ResponseEntity<Subscription>> subscribe(@RequestBody Subscription subscription) {
+        log.info(">>>>> Request: " + subscription);
+        return webClient.post() //
+                .uri(discoveryServiceUrl() + "/v1/subscriptions/subscribe") //
+                .bodyValue(subscription) //
+                .retrieve() //
+                .bodyToMono(Subscription.class) //
+                .map(ResponseEntity::ok);
     }
 
 }
