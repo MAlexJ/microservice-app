@@ -21,6 +21,11 @@ spring:
           predicates:
             - Path=/v1/bills/{number}
             - Method=GET
+        - id: app-user-service
+          uri: lb://app-user-service
+          predicates:
+            - Path=/v1/users/{username}, /v1/users
+            - Method=GET, POST
 
 eureka:
   client:
