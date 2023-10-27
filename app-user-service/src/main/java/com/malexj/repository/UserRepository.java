@@ -1,10 +1,10 @@
 package com.malexj.repository;
 
-import com.malexj.entity.UserEntity;
+import com.malexj.model.entity.User;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 
-public interface UserRepository extends ReactiveCrudRepository<UserEntity, Long> {
+public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
-    Mono<UserEntity> findUserEntitiesByUsername(String username);
+    Mono<User> findUserEntitiesByUsernameIgnoreCase(String username);
 }

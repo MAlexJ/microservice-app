@@ -5,6 +5,29 @@ databaseChangeLog:
       author: malexj
       changes:
         - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: true
+              - column:
+                  name: name
+                  type: varchar(25)
+                  constraints:
+                    unique: true
+                    nullable: false
+      rollback:
+        - delete:
+            tableName: roles
+  - changeSet:
+      id: 2
+      author: malexj
+      changes:
+        - createTable:
             tableName: users
             columns:
               - column:
@@ -38,52 +61,14 @@ databaseChangeLog:
                   constraints:
                     unique: false
                     nullable: false
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    unique: false
+                    nullable: false
+                    foreignKeyName: fk_role_id
+                    references: roles(id)
       rollback:
         - delete:
             tableName: users
-  - changeSet:
-      id: 2
-      author: malexj
-      changes:
-        - createTable:
-            tableName: roles
-            columns:
-              - column:
-                  name: id
-                  type: BIGINT
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: true
-              - column:
-                  name: name
-                  type: varchar(50)
-                  constraints:
-                    unique: true
-                    nullable: false
-      rollback:
-        - delete:
-            tableName: roles
-  - changeSet:
-      id: 3
-      author: malexj
-      changes:
-        - createTable:
-            tableName: users_roles
-            columns:
-              - column:
-                  name: users_id
-                  type: BIGINT
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: true
-              - column:
-                  name: roles_id
-                  type: BIGINT
-                  constraints:
-                    primaryKey: true
-                    nullable: true
-      rollback:
-        - delete:
-            tableName: users_roles

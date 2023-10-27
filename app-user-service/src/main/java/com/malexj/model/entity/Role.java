@@ -1,4 +1,4 @@
-package com.malexj.entity;
+package com.malexj.model.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Data
 @Table(value = "roles")
 @EqualsAndHashCode(exclude = {"id"})
-public class RoleEntity {
+public class Role {
 
     @Id
     private Long id;
