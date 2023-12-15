@@ -18,18 +18,16 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class HtmlServiceImpl extends AbstractService implements HtmlService {
 
-
     /**
      * Note: Hardcode init data
      */
     private static final String SEARCH_BILL_URL = "https://itd.rada.gov.ua/billInfo/Bills/searchResults";
-    private final static Map<String, String> FORM_URLENCODED_DATA = Map.of( //
+    private static final Map<String, String> FORM_URLENCODED_DATA = Map.of( //
             "BillSearchModel.registrationNumber", "9672", //
             "BillSearchModel.registrationNumberCompareOperation", "2", //
             "BillSearchModel.session", "10", //
@@ -83,7 +81,7 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     public Flux<BillRequest> convertSearchResponse(SearchResponse response) {
         List<BillRequest> bills = response.getBills().stream() //
                 .map(mapper::responseMapper) //
-                .collect(Collectors.toList());
+                .toList();
         return Flux.fromIterable(bills);
     }
 
