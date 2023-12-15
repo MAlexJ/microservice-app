@@ -38,7 +38,7 @@ public class DiffServiceImpl extends AbstractService implements DiffService {
     @Override
     public Mono<ResponseEntity<Void>> processingBillStatusDifferences(BillResponse response) {
         return webClient.post() //
-                .uri(buildUri(discoveryServiceUrl(virtualHostname), endpoint)) //
+                .uri(buildServiceUri(virtualHostname, endpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildBody(response)) //
                 .retrieve() //

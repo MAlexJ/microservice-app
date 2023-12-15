@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "bb0ae32a-03a0-45f1-8399-56fde96f371e",
+		"name": "app-mail-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946",
+		"_collection_link": "https://cloudy-spaceship-2566.postman.co/workspace/Team-Workspace~0eae541b-05f0-45f8-8239-5098fc53d0aa/collection/1029946-bb0ae32a-03a0-45f1-8399-56fde96f371e?action=share&source=collection_link&creator=1029946"
+	},
+	"item": [
+		{
+			"name": "Send email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"toEmail\":\"alexmaximovj@gmail.com\",\r\n    \"title\":\"Change bill status\",\r\n    \"message\":\"Allert\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/v1/emails",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"v1",
+						"emails"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

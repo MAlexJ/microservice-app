@@ -1,0 +1,166 @@
+{
+	"info": {
+		"_postman_id": "8a72d704-5b09-4d4b-bc2f-7c012ae020a8",
+		"name": "app-storage-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946",
+		"_collection_link": "https://cloudy-spaceship-2566.postman.co/workspace/Team-Workspace~0eae541b-05f0-45f8-8239-5098fc53d0aa/collection/1029946-8a72d704-5b09-4d4b-bc2f-7c012ae020a8?action=share&source=collection_link&creator=1029946"
+	},
+	"item": [
+		{
+			"name": "Get bill statuses",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "BillSearchModel.registrationNumber",
+							"value": "9672",
+							"type": "text"
+						},
+						{
+							"key": "BillSearchModel.registrationNumberCompareOperation",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "BillSearchModel.detailView",
+							"value": "true",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8087/billStatuses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8087",
+					"path": [
+						"billStatuses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get bills",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8087/bills",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8087",
+					"path": [
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get bills by number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8087/bills?number=9672",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8087",
+					"path": [
+						"bills"
+					],
+					"query": [
+						{
+							"key": "number",
+							"value": "9672"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new bill with statuses",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Location",
+						"value": "http://localhost:8087/billStatuses",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"link\": \"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\",\r\n    \"name\": \"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\r\n    \"number\": \"9672\",\r\n    \"registrationDate\": \"2023-09-04\",\r\n    \"statuses\": [\r\n        {\r\n            \"data\": \"2023-09-05\",\r\n            \"status\": \"Надано для ознайомлення\"\r\n        },\r\n        {\r\n            \"data\": \"2023-09-04\",\r\n            \"status\": \"Направлено на розгляд Комітету\"\r\n        },\r\n        {\r\n            \"data\": \"2023-09-04\",\r\n            \"status\": \"Передано на розгляд керівництву\"\r\n        },\r\n        {\r\n            \"data\": \"2023-09-04\",\r\n            \"status\": \"Одержано Верховною Радою України\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8087/bills",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8087",
+					"path": [
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new bill status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Location",
+						"value": "http://localhost:8087/bills/3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"data\": \"2023-09-05\",\r\n    \"status\": \"Надано для ознайомленняfghjkl\",\r\n    \"bill\": \"http://localhost:8087/bills/17\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8087/billStatuses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8087",
+					"path": [
+						"billStatuses"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

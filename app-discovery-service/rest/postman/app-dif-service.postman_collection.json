@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "6a485745-c5cc-48ad-aa82-c6755f00919f",
+		"name": "app-dif-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946",
+		"_collection_link": "https://cloudy-spaceship-2566.postman.co/workspace/Team-Workspace~0eae541b-05f0-45f8-8239-5098fc53d0aa/collection/1029946-6a485745-c5cc-48ad-aa82-c6755f00919f?action=share&source=collection_link&creator=1029946"
+	},
+	"item": [
+		{
+			"name": "Diff bill",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"link\": \"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\",\r\n    \"name\": \"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\r\n    \"number\": \"9672\",\r\n    \"registrationDate\": \"2023-09-04\",\r\n    \"statuses\": [\r\n        {\r\n            \"data\": \"2023-09-05\",\r\n            \"status\": \"Надано для ознайомлення\"\r\n        },\r\n        {\r\n            \"data\": \"2023-09-04\",\r\n            \"status\": \"Направлено на розгляд Комітету\"\r\n        },\r\n        {\r\n            \"data\": \"2023-09-04\",\r\n            \"status\": \"Передано на розгляд керівництву\"\r\n        },\r\n        {\r\n            \"data\": \"2023-09-04\",\r\n            \"status\": \"Одержано Верховною Радою України\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/v1/diff",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"v1",
+						"diff"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,61 @@
+{
+	"info": {
+		"_postman_id": "a4639c23-bc1f-47b0-b449-423fff622172",
+		"name": "app-user-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946",
+		"_collection_link": "https://cloudy-spaceship-2566.postman.co/workspace/Team-Workspace~0eae541b-05f0-45f8-8239-5098fc53d0aa/collection/1029946-a4639c23-bc1f-47b0-b449-423fff622172?action=share&source=collection_link&creator=1029946"
+	},
+	"item": [
+		{
+			"name": "Find user by name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{app-user-service_host}}:{{app-user-service_port}}/v1/users/malex",
+					"protocol": "http",
+					"host": [
+						"{{app-user-service_host}}"
+					],
+					"port": "{{app-user-service_port}}",
+					"path": [
+						"v1",
+						"users",
+						"malex"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Cat\",\r\n    \"email\": \"cat@gmail.com\",\r\n    \"password\": \"657843\",\r\n    \"registrationDate\": \"2023-10-26\",\r\n    \"roleId\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{app-user-service_host}}:{{app-user-service_port}}/v1/users",
+					"protocol": "http",
+					"host": [
+						"{{app-user-service_host}}"
+					],
+					"port": "{{app-user-service_port}}",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "2072ae50-e4ed-4b8a-bc4a-220c05d2d1cf",
+		"name": "discovery-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946",
+		"_collection_link": "https://cloudy-spaceship-2566.postman.co/workspace/Team-Workspace~0eae541b-05f0-45f8-8239-5098fc53d0aa/collection/1029946-2072ae50-e4ed-4b8a-bc4a-220c05d2d1cf?action=share&source=collection_link&creator=1029946"
+	},
+	"item": [
+		{
+			"name": "Discovery lookup all services",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: 'http://localhost:8761/eureka/v2/apps',\r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Accept': 'application/json',\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"   let jsonResp = res.json();\r",
+							"   let applications = jsonResp.applications.application;\r",
+							"   \r",
+							"    for (var i = 0; i < applications.length; i++) {\r",
+							"      var inst = applications[i];\r",
+							"      let name = inst.name;\r",
+							"      console.log(name)\r",
+							"      \r",
+							"      let host = inst.instance[0].hostName\r",
+							"      console.log(host)\r",
+							"\r",
+							"      let port = inst.instance[0].port.$;\r",
+							"      console.log(port)\r",
+							"\r",
+							"      if(name === 'APP-USER-SERVICE'){       \r",
+							"          postman.setEnvironmentVariable(\"app-user-service_host\", host);\r",
+							"          postman.setEnvironmentVariable(\"app-user-service_port\", port);\r",
+							"      }\r",
+							"      if(name === 'APP-USER-SUBSCRIPTION-SERVICE'){       \r",
+							"          postman.setEnvironmentVariable(\"app-user-subscription-service-host\", host);\r",
+							"          postman.setEnvironmentVariable(\"app-user-subscription-service-port\", port);\r",
+							"      }\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8761/eureka/v2/apps",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8761",
+					"path": [
+						"eureka",
+						"v2",
+						"apps"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -24,7 +24,13 @@ public abstract class AbstractService {
     protected final BilDtoMapper mapper;
 
 
-    protected String discoveryServiceUrl(String virtualHostname) {
+    protected URI buildServiceUri(String virtualHostname, String endpointPath) {
+        String serviceUrl = discoveryService(virtualHostname);
+        log.info("Service URL - {} defined by hostname - {}", serviceUrl, virtualHostname);
+        return buildUriComponent(serviceUrl, endpointPath);
+    }
+
+    private String discoveryService(String virtualHostname) {
         try {
             InstanceInfo nextServerFromEureka = eurekaClient.getNextServerFromEureka(virtualHostname, false);
             return nextServerFromEureka.getHomePageUrl();
@@ -34,7 +40,7 @@ public abstract class AbstractService {
     }
 
 
-    protected URI buildUri(String url, String endpoint) {
+    private URI buildUriComponent(String url, String endpoint) {
         return UriComponentsBuilder.fromUriString(url) //
                 .path(endpoint) //
                 .build() //

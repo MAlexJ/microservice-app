@@ -57,7 +57,7 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     @Override
     public Mono<SearchResponse> fetchBillSearch() {
         return webClient.post() //
-                .uri(buildUri(discoveryServiceUrl(virtualHostname), searchResultsEndpoint)) //
+                .uri(buildServiceUri(virtualHostname, searchResultsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(buildSearchRequest()) //
                 .retrieve() //
@@ -69,7 +69,7 @@ public class HtmlServiceImpl extends AbstractService implements HtmlService {
     @Override
     public Mono<BillResponse> fetchBillStatuses(BillRequest request) {
         return webClient.post() //
-                .uri(buildUri(discoveryServiceUrl(virtualHostname), billsEndpoint)) //
+                .uri(buildServiceUri(virtualHostname, billsEndpoint)) //
                 .contentType(MediaType.APPLICATION_JSON) //
                 .bodyValue(request) //
                 .retrieve() //
