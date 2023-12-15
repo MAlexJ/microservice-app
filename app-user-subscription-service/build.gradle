@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocOpenapiWeb}"
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation "me.paulschwarz:spring-dotenv:${paulschwarzDotenv}"
     compileOnly 'org.projectlombok:lombok'
