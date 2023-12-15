@@ -8,9 +8,9 @@ to which the user has subscribed.
 
 ### project settings:
 
-- java 17 +
-- gradle 8.3 +
-- Spring boot 3
+- java 21
+- gradle 8.5
+- Spring boot 3 (v.3.2.0)
 
 ### Project structure
 
@@ -46,7 +46,7 @@ APP_MAIL_SERVICE_DEFAULT_RECIPIENT
 
 ### PostgreSQL
 
-For testing you can use a free PostgreSQL database - https://www.elephantsql.com/
+For testing, you can use a free PostgreSQL database - https://www.elephantsql.com/
 
 ### Gmail settings
 

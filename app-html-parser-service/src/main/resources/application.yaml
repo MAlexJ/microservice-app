@@ -14,3 +14,7 @@ management:
       exposure:
         include: '*'
     enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
