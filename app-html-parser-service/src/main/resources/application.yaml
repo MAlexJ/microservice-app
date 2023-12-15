@@ -5,6 +5,11 @@ spring:
   application:
     name: app-html-parser-service
 
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
+
 html:
   bill-search-url: ${APP_HTML_SERVICE_SEARCH_BILL_URL:https://itd.rada.gov.ua/billInfo/Bills/searchResults}
 

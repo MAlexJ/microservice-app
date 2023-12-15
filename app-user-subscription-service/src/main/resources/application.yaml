@@ -11,6 +11,11 @@ spring:
       database: ${APP_USER_SUBSCRIPTION_SERVICE_MONGODB_DATABASE:user-subscription-db}
       auto-index-creation: true
 
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
+
 management:
   endpoints:
     web:

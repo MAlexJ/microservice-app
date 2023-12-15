@@ -16,3 +16,12 @@ management:
       exposure:
         include: '*'
     enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
+
+springdoc:
+  swagger-ui:
+    path: /

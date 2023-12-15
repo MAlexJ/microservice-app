@@ -32,6 +32,9 @@ management:
     enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}
 
 eureka:
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/

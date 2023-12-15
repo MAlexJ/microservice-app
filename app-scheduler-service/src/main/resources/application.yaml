@@ -22,6 +22,11 @@ diff-service:
     name: ${APP_DIFF_SERVICE_APPLICATION_NAME:app-diff-service}
   endpoint: ${APP_DIFF_SERVICE_ENDPOINT:/v1/diff}
 
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
+
 management:
   endpoints:
     web:

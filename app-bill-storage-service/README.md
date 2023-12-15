@@ -119,3 +119,42 @@ databaseChangeLog:
 
 #### Hibernate One to Many
 link: https://www.baeldung.com/hibernate-one-to-many
+
+
+## Docker
+
+Info: https://hub.docker.com/_/postgres
+
+**database version**: 16
+**command**: docker pull postgres:16
+
+start a postgres instance:
+
+```
+    $ docker run -d \
+    --name postgres-v16-bill-db \
+    -e POSTGRES_PASSWORD=password \
+    -e POSTGRES_USER=user \
+    -e POSTGRES_DB=db \
+    postgres:16
+```
+
+one-line command
+
+```
+docker run -d -p 5433:5432 --name postgres-v16-bill-db -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=db postgres:16
+```
+
+Note:
+The default postgres user and database are created in the entrypoint with initdb.
+
+### API documentation
+
+Project uses OpenAPI (link: https://springdoc.org/) that will describe the API
+of REST endpoints.
+
+API documentation should be available by URL:
+
+* localhost:{PORT}/
+* localhost:{PORT}/webjars/swagger-ui/index.html
+* localhost:{PORT}/swagger-ui.html

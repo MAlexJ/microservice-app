@@ -28,6 +28,9 @@ spring:
             - Method=GET, POST
 
 eureka:
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
