@@ -7,6 +7,7 @@ of REST endpoints.
 
 API documentation should be available by URL:
 
+* localhost:{PORT}/
 * localhost:{PORT}/webjars/swagger-ui/index.html
 * localhost:{PORT}/swagger-ui.html
 

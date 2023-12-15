@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-public class ApiRestController {
+public class ApiRestController extends AbstractRestController {
 
     private final UserService service;
 
@@ -23,7 +23,8 @@ public class ApiRestController {
     public Mono<ResponseEntity<User>> findUserByName(@PathVariable String username) {
         return service.findUserCredentials(username) //
                 .doOnNext(user -> log.info("user - {} found by name - {}", user, username)) //
-                .map(ResponseEntity::ok);
+                .map(ResponseEntity::ok) //
+                .switchIfEmpty(buildUserNotFoundErrorResponse());
     }
 
 

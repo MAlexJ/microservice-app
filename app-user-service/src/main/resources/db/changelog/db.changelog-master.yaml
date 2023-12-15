@@ -72,3 +72,47 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: users
+  - changeSet:
+      id: 3
+      author: malexj
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "ADMIN"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: name
+                  value: "USER"
+  - changeSet:
+      id: 4
+      author: malexj
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: "malex"
+              - column:
+                  name: email
+                  value: "email@email.com"
+              - column:
+                  name: password
+                  value: "pasword"
+              - column:
+                  name: registration_date
+                  value: "now()"
+              - column:
+                  name: role_id
+                  value: "1"
