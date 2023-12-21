@@ -22,12 +22,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8085/v1/bills",
+					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/v1/bills",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{app-http-parser-service-host}}"
 					],
-					"port": "8085",
+					"port": "{{app-http-parser-service-port}}",
 					"path": [
 						"v1",
 						"bills"
@@ -51,12 +51,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8085/v1/searchResults",
+					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/v1/searchResults",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{app-http-parser-service-host}}"
 					],
-					"port": "8085",
+					"port": "{{app-http-parser-service-port}}",
 					"path": [
 						"v1",
 						"searchResults"

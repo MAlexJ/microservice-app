@@ -73,6 +73,19 @@ public class ApiRestController {
     }
 
 
+    /**
+     * Json request example
+     * <pre>
+     * {@code
+     * {
+     * "link":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664",
+     * "number":"9672",
+     * "name":"text description",
+     * "registrationDate":"2023-09-04"
+     * }
+     * }
+     * </pre>
+     */
     @PostMapping("/bills")
     public Mono<BillResponse> findBillStatuses(@RequestBody BillRequest request) {
         log.info("Start processing find bill statuses to search statuses and parse HTML page, request - {}", request);

@@ -43,6 +43,10 @@
 							"          postman.setEnvironmentVariable(\"app-user-subscription-service-host\", host);\r",
 							"          postman.setEnvironmentVariable(\"app-user-subscription-service-port\", port);\r",
 							"      }\r",
+							"      if(name === 'APP-HTML-PARSER-SERVICE'){       \r",
+							"          postman.setEnvironmentVariable(\"app-http-parser-service-host\", host);\r",
+							"          postman.setEnvironmentVariable(\"app-http-parser-service-port\", port);\r",
+							"      }\r",
 							"    }\r",
 							"});"
 						],
@@ -72,12 +76,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8761/eureka/v2/apps",
+					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/eureka/v2/apps",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{app-http-parser-service-host}}"
 					],
-					"port": "8761",
+					"port": "{{app-http-parser-service-port}}",
 					"path": [
 						"eureka",
 						"v2",
