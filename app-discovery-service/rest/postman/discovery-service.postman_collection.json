@@ -76,12 +76,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/eureka/v2/apps",
+					"raw": "http://localhost:8761/eureka/v2/apps",
 					"protocol": "http",
 					"host": [
-						"{{app-http-parser-service-host}}"
+						"localhost"
 					],
-					"port": "{{app-http-parser-service-port}}",
+					"port": "8761",
 					"path": [
 						"eureka",
 						"v2",

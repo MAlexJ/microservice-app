@@ -1,6 +1,7 @@
 package com.malex.services;
 
 import com.malex.models.base.FormUrlencodedData;
+import com.malex.models.request.BillRequest;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
 
@@ -14,5 +15,7 @@ public interface ApiRestService {
 
 
     Mono<String> fetchSearchResult(MultiValueMap<String, String> formData);
+
+    Mono<String> post(String url, BillRequest jsonRequest);
 
 }

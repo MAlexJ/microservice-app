@@ -1,4 +1,4 @@
-package com.malex.controllers;
+package com.malex.controllers.v1;
 
 import com.malex.mapper.ObjectMapper;
 import com.malex.models.base.Bill;
@@ -10,7 +10,7 @@ import com.malex.models.response.BillResponse;
 import com.malex.models.response.SearchResponse;
 import com.malex.services.ApiRestService;
 import com.malex.services.HtmlPageParsingService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -19,13 +19,13 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/v1")
 public class ApiRestController {
 
-    private ObjectMapper mapper;
-    private ApiRestService restService;
-    private HtmlPageParsingService parsingService;
+    private final ObjectMapper mapper;
+    private final ApiRestService restService;
+    private final HtmlPageParsingService parsingService;
 
 
     /**
@@ -91,7 +91,7 @@ public class ApiRestController {
         log.info("Start processing find bill statuses to search statuses and parse HTML page, request - {}", request);
         return restService.fetchBillStatus(request.getLink()) //
                 .doOnNext(message -> log.info("Processing html page with Html/Jsoup parsing service")) //
-                .flatMapMany(html -> parsingService.processBillStatus(html)) //
+                .flatMapMany(parsingService::processBillStatus) //
                 .collectList() //
                 .map(statuses -> buildBillResponse(request, statuses)) //
                 .doOnNext(message -> log.info("Parse API response processing completed, response - {}", message));
@@ -103,7 +103,7 @@ public class ApiRestController {
         log.info("Start processing find bills and parse HTML page, request - {}", request);
         return restService.fetchSearchResult(request.getLink(), request.getFormUrlencodedData()) //
                 .doOnNext(message -> log.info("Processing html page with Html/Jsoup parsing service")) //
-                .flatMapMany(html -> parsingService.processBillSearchResult(html)) //
+                .flatMapMany(parsingService::processBillSearchResult) //
                 .collectList() //
                 .map(this::buildSearchResponse) //
                 .doOnNext(message -> log.info("Search API response processing completed, response - {}", message));
