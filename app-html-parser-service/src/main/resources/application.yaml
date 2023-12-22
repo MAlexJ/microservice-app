@@ -10,6 +10,11 @@ eureka:
     instance-id: ${spring.application.name}
     prefer-ip-address: true
 
+proxy:
+  service:
+    url: ${APP_HTML_SERVICE_PROXY_URL:https://eu-central-1.aws.data.mongodb-api.com/app}
+    secret: ${APP_HTML_SERVICE_PROXY_SECRET:proxy_secret}
+
 html:
   bill-search-url: ${APP_HTML_SERVICE_SEARCH_BILL_URL:https://itd.rada.gov.ua/billInfo/Bills/searchResults}
 

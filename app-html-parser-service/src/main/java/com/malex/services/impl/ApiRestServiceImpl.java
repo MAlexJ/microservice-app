@@ -1,7 +1,8 @@
 package com.malex.services.impl;
 
 import com.malex.models.base.FormUrlencodedData;
-import com.malex.models.request.BillRequest;
+import com.malex.models.request.ProxyRequest;
+import com.malex.models.response.ProxyResponse;
 import com.malex.services.ApiRestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,13 +38,13 @@ public class ApiRestServiceImpl implements ApiRestService {
     }
 
     @Override
-    public Mono<String> post(String url, BillRequest jsonRequest) {
+    public Mono<ProxyResponse> fetchProxyResponse(String url, ProxyRequest request) {
         return webClient.post() //
                 .uri(url) //
                 .contentType(MediaType.APPLICATION_JSON) //
-                .bodyValue(jsonRequest)
+                .bodyValue(request) //
                 .retrieve() //
-                .bodyToMono(String.class);
+                .bodyToMono(ProxyResponse.class);
     }
 
 
