@@ -51,3 +51,7 @@ For testing, you can use a free PostgreSQL database - https://www.elephantsql.co
 ### Gmail settings
 
 How to set up gmail account is indicated in app-mail-service project's redmi file
+
+### IDE code style
+
+link: https:github.com/google/google-java-format/tree/master

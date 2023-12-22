@@ -66,7 +66,7 @@ public class ApiRestController {
                 .build();
         return restService.fetchSearchResult(formData.getFormData()) //
                 .doOnNext(message -> log.info("Processing html page with Html/Jsoup parsing service")) //
-                .flatMapMany(html -> parsingService.processBillSearchResult(html)) //
+                .flatMapMany(parsingService::processBillSearchResult) //
                 .collectList() //
                 .map(this::buildSearchResponse) //
                 .doOnNext(message -> log.info("Search API response processing completed, response - {}", message));

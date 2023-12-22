@@ -64,6 +64,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get bills v2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/v2/proxy",
+					"protocol": "http",
+					"host": [
+						"{{app-http-parser-service-host}}"
+					],
+					"port": "{{app-http-parser-service-port}}",
+					"path": [
+						"v2",
+						"proxy"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

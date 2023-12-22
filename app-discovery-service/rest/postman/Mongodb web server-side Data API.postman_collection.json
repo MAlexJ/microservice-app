@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "e5a930f5-ad48-4115-b8a9-aecad3df7a46",
+		"name": "Mongodb web server-side Data API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946",
+		"_collection_link": "https://cloudy-spaceship-2566.postman.co/workspace/Team-Workspace~0eae541b-05f0-45f8-8239-5098fc53d0aa/collection/1029946-e5a930f5-ad48-4115-b8a9-aecad3df7a46?action=share&source=collection_link&creator=1029946"
+	},
+	"item": [
+		{
+			"name": "Find One",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "apiKey",
+						"value": "D9XgsRIxWIYTefSs11frIe2n1Zq0uVayjBXja7BhjvCqri2MaAdd4V8RJEg7bpfN",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Access-Control-Request-Headers",
+						"value": "*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dataSource\":\"Cluster0\",\r\n    \"database\":\"sampleDB\",\r\n    \"collection\":\"eventEntity\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://eu-central-1.aws.data.mongodb-api.com/app/data-jaiwg/endpoint/data/v1/action/findOne",
+					"protocol": "https",
+					"host": [
+						"eu-central-1",
+						"aws",
+						"data",
+						"mongodb-api",
+						"com"
+					],
+					"path": [
+						"app",
+						"data-jaiwg",
+						"endpoint",
+						"data",
+						"v1",
+						"action",
+						"findOne"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Http client gel bills",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://eu-central-1.aws.data.mongodb-api.com/app/http-processing-gdxaz/endpoint/v1/atlas/bills?secret=65849bd1f7bc2e9e60e0c1a8",
+					"protocol": "https",
+					"host": [
+						"eu-central-1",
+						"aws",
+						"data",
+						"mongodb-api",
+						"com"
+					],
+					"path": [
+						"app",
+						"http-processing-gdxaz",
+						"endpoint",
+						"v1",
+						"atlas",
+						"bills"
+					],
+					"query": [
+						{
+							"key": "secret",
+							"value": "65849bd1f7bc2e9e60e0c1a8"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
