@@ -9,11 +9,11 @@ import reactor.core.publisher.Mono;
 
 public interface ApiRestService {
 
-    Mono<String> fetchBillStatus(String url);
+  Mono<String> fetchBillStatus(String url);
 
-    Mono<String> fetchSearchResult(String url, List<FormUrlencodedData> formData);
+  Mono<String> fetchSearchResult(String url, List<FormUrlencodedData> formData);
 
-    Mono<String> fetchSearchResult(MultiValueMap<String, String> formData);
+  Mono<String> fetchSearchResult(MultiValueMap<String, String> formData);
 
-    Mono<ProxyResponse> fetchProxyResponse(ProxyRequest request);
+  Mono<ProxyResponse> fetchProxyResponse(ProxyRequest request);
 }

@@ -1,9 +1,8 @@
 package com.malex.models.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-
 import java.time.LocalDate;
+import lombok.*;
 
 @Builder
 @Getter
@@ -12,17 +11,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class BillStatus extends AbstractModel {
 
-    @JsonProperty("data")
-    private LocalDate data;
+  @JsonProperty("data")
+  private LocalDate data;
 
-    @JsonProperty("status")
-    private String status;
+  @JsonProperty("status")
+  private String status;
 
-    public static class BillStatusBuilder {
-        public BillStatusBuilder data(String date) {
-            this.data = parseDate(date);
-            return this;
-        }
+  public static class BillStatusBuilder {
+    public BillStatusBuilder data(String date) {
+      this.data = parseDate(date);
+      return this;
     }
-
+  }
 }

@@ -16,15 +16,12 @@ import lombok.Data;
  *          4.1. "Date": ["Fri, 22 Dec 2023 07:33:34 GMT"]
  *          4.2. "Content-Type": ["text/html; charset=utf-8"],
  *          4.3. "Vary": ["Accept-Encoding"],
- *  4.4. "Server":
- *  * ["Microsoft-IIS/10.0"],
- *  4.5. "Strict-Transport-Security": ["max-age=2592000"]
- *  5. "body".
- *  5.1.
- *  * "body"."Subtype": 0
- *  5.2. "body"."Data": ".....base64....encoding...."
- *     </code>
- *
+ *          4.4. "Server":  ["Microsoft-IIS/10.0"],
+ *          4.5. "Strict-Transport-Security": ["max-age=2592000"]
+ *          5. "body".
+ *          5.1. "body"."Subtype": 0
+ *          5.2. "body"."Data": ".....base64....encoding...."
+ * </code>
  * </pre>
  */
 @Data

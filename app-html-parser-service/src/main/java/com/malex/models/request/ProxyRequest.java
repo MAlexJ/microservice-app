@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ProxyRequest {
 
-  /** Link to site URL */
+  /** Url to site */
   @JsonProperty("url")
   private String url;
 }

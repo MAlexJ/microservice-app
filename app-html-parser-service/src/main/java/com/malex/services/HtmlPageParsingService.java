@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 
 public interface HtmlPageParsingService {
 
-    Flux<BillStatus> processBillStatus(String html);
+  Flux<BillStatus> processBillStatus(String html);
 
-    Flux<Bill> processBillSearchResult(String html);
+  Flux<Bill> processBillSearchResult(String html);
 }
