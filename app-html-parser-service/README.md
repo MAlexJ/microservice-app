@@ -34,14 +34,12 @@ link [Build a Totally Serverless REST API with MongoDB Atlas](https://www.youtub
 6. 'Function Editor' -> configure script
 
 ```
+// http web client
 exports = function({ query, headers, body}, response) {
     const jsonBoby = JSON.parse(body.text());
-    console.log("link:", jsonBoby);
-    
-    const link = jsonBoby["link"]
-    console.log("link:", link);
-    
-    return context.http.get({ url: link});
+    const url = jsonBoby["url"]
+    console.log("url:", url);
+    return context.http.get({ url: url});
 };
 ```
 

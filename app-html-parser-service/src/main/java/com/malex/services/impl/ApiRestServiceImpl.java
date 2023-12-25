@@ -1,10 +1,8 @@
 package com.malex.services.impl;
 
 import com.malex.models.base.FormUrlencodedData;
-import com.malex.models.request.ProxyRequest;
-import com.malex.models.response.ProxyResponse;
+import com.malex.services.AbstractRestService;
 import com.malex.services.ApiRestService;
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,44 +15,17 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ApiRestServiceImpl implements ApiRestService {
+public class ApiRestServiceImpl extends AbstractRestService implements ApiRestService {
 
   @Value("${html.bill-search-url}")
   private String searchBillUrl;
 
-  @Value("${proxy.service.url}")
-  private String proxyServiceUrl;
-
-  @Value("${proxy.service.secret}")
-  private String proxyServiceSecret;
-
   private final WebClient webClient;
-
-  @Override
-  public Mono<ProxyResponse> fetchProxyResponse(ProxyRequest request) {
-    URI uri = buildUriComponent(proxyServiceUrl, Map.of("secret", proxyServiceSecret));
-    return webClient
-        .post()
-        .uri(uri)
-        .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(request)
-        .retrieve()
-        .bodyToMono(ProxyResponse.class)
-        .doOnNext(
-            response -> log.info("Proxy API call url - {}, Http response - {}", uri, response));
-  }
-
-  private URI buildUriComponent(String url, Map<String, String> params) {
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(url);
-    params.forEach(uriBuilder::queryParam);
-    return uriBuilder.build().toUri();
-  }
 
   @Override
   public Mono<String> fetchBillStatus(String url) {

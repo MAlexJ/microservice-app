@@ -1,3 +1,16 @@
+buildscript {
+    new BufferedReader(new FileReader(file('../gradle.properties')))
+            .withCloseable { reader ->
+                String line
+                while ((line = reader.readLine()) != null) {
+                    println(line)
+                    String name = line.substring(0, line.indexOf('='))
+                    String value = line.substring(line.indexOf('=') + 1)
+                    project.ext.set(name, value)
+                }
+            }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version "${springBootVersion}"
@@ -33,6 +46,11 @@ dependencies {
     implementation "org.jsoup:jsoup:${jsoupHtmlParser}"
     implementation "me.paulschwarz:spring-dotenv:${paulschwarzDotenv}"
     implementation "org.springdoc:springdoc-openapi-starter-webflux-ui:${springdocOpenapiWebflux}"
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"

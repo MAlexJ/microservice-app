@@ -5,8 +5,18 @@ import java.time.LocalDate;
 import lombok.Data;
 
 /**
- * Example: { "link":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664", "number":"9672",
- * "name":"Name of bill", "registrationDate":"2023-09-04" }
+ * Json API request example:
+ *
+ * <pre>
+ *     <code>
+ * {
+ *         "link":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664",
+ *         "number":"9672",
+ *          "name":"Name of bill",
+ *          "registrationDate":"2023-09-04"
+ *       }
+ *     </code>
+ * </pre>
  */
 @Data
 public class BillRequest {

@@ -12,7 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public abstract class AbstractService {
+public abstract class AbstractParsingService {
 
   /** Tags or html classes constants */
   protected static final String NAV_TAB1_ELEMENT = "nav-tab1";

@@ -72,7 +72,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\"\r\n}",
+					"raw": "{\r\n   \"url\":\"https://jsoup.org/cookbook/extracting-data/selector-syntax\",\r\n   \"xpath\": \"/html/body/div[1]/div[3]/div[1]/div/p[1]\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

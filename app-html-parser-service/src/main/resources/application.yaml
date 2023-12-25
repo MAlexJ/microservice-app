@@ -19,6 +19,7 @@ html:
   bill-search-url: ${APP_HTML_SERVICE_SEARCH_BILL_URL:https://itd.rada.gov.ua/billInfo/Bills/searchResults}
 
 management:
+  health.circuitbreakers.enabled: true
   endpoints:
     web:
       exposure:
@@ -28,3 +29,15 @@ management:
 springdoc:
   swagger-ui:
     path: /
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10

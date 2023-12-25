@@ -2,31 +2,29 @@ package com.malex.services.impl;
 
 import com.malex.models.base.Bill;
 import com.malex.models.base.BillStatus;
-import com.malex.services.AbstractService;
+import com.malex.services.AbstractParsingService;
 import com.malex.services.ElementConversionService;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 @Service
-public class ElementConversionServiceImpl extends AbstractService
+public class ElementConversionServiceImpl extends AbstractParsingService
     implements ElementConversionService {
 
   @Override
   public Flux<BillStatus> convertElementsToBillStatuses(List<Elements> elements) {
-    List<BillStatus> statuses =
-        elements.stream().map(this::buildBillStatusObj).collect(Collectors.toList());
+    List<BillStatus> statuses = elements.stream().map(this::buildBillStatusObj).toList();
     return Flux.fromIterable(statuses);
   }
 
   @Override
   public Flux<Bill> convertElementsToBills(List<Elements> elements) {
-    List<Bill> bills = elements.stream().map(this::buildBillObj).collect(Collectors.toList());
+    List<Bill> bills = elements.stream().map(this::buildBillObj).toList();
     return Flux.fromIterable(bills);
   }
 
