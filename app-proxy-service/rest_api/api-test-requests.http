@@ -1,0 +1,29 @@
+### Pre request script
+GET http://localhost:8761/eureka/v2/apps
+Accept: application/json
+
+> {%
+    const jsonArray = response.body['applications']
+    let applications = jsonArray.application;
+    for (let i = 0; i < applications.length; i++) {
+        let inst = applications[i];
+        let name = inst.name;
+        if (name === 'APP-PROXY-SERVICE') {
+            let host = inst.instance[0].hostName
+            let port = inst.instance[0].port.$;
+            client.log("Service name: " + name)
+            client.log("host: " + host)
+            client.global.set("app-proxy-service-host", host)
+            client.log("port: " + port)
+            client.global.set("app-proxy-service-port", port)
+        }
+    }
+%}
+
+###
+POST http://localhost:{{app-proxy-service-port}}/v1/proxy
+Content-Type: application/json
+
+{
+   "url":"https://jsoup.org/cookbook/extracting-data/selector-syntax"
+}

@@ -1,0 +1,40 @@
+server:
+  port: ${APP_PROXY_SERVICE_PORT:0}
+
+spring:
+  application:
+    name: app-proxy-service
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
+
+proxy:
+  service:
+    url: ${APP_PROXY_SERVICE_PROXY_URL:https://eu-central-1.aws.data.mongodb-api.com/app}
+    secret: ${APP_PROXY_SERVICE_PROXY_SECRET:proxy_secret}
+
+management:
+  health.circuitbreakers.enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    enabled-by-default: ${SPRING_ACTUATOR_ENABLED:true}
+
+springdoc:
+  swagger-ui:
+    path: /
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
