@@ -20,10 +20,19 @@ Accept: application/json
     }
 %}
 
-###
+### Test successufl case
 POST http://localhost:{{app-proxy-service-port}}/v1/proxy
 Content-Type: application/json
 
 {
    "url":"https://jsoup.org/cookbook/extracting-data/selector-syntax"
+}
+
+
+### Test failure case
+POST http://localhost:{{app-proxy-service-port}}/v1/proxy
+Content-Type: application/json
+
+{
+  "url":"https://jsoup2.org/cookbook2/extracting-data/selector-syntax"
 }

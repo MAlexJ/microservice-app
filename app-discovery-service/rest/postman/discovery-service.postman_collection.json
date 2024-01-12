@@ -47,6 +47,10 @@
 							"          postman.setEnvironmentVariable(\"app-http-parser-service-host\", host);\r",
 							"          postman.setEnvironmentVariable(\"app-http-parser-service-port\", port);\r",
 							"      }\r",
+							"      if(name === 'APP-PROXY-SERVICE'){       \r",
+							"          postman.setEnvironmentVariable(\"app-proxy-service-host\", host);\r",
+							"          postman.setEnvironmentVariable(\"app-proxy-service-port\", port);\r",
+							"      }\r",
 							"    }\r",
 							"});"
 						],

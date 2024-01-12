@@ -5,13 +5,15 @@
 Project uses OpenAPI (link: https://springdoc.org/) that will describe the API
 of REST endpoints.
 
-API documentation should be available by URL:
+API documentation should be available by URL: http://localhost:{port}/
 
 ### ENV variables:
 
 * SPRING_ACTUATOR_ENABLED - true by default
+* APP_PROXY_SERVICE_PROXY_URL - url to web Atlas Mongodb service
+* APP_PROXY_SERVICE_PROXY_SECRET - admin secret key
 
-### Atlas Mongodb  Web client
+### Atlas Mongodb Web client
 
 Service: https://cloud.mongodb.com/
 

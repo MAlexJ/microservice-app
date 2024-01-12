@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "f5dd3002-cbc5-482f-9a34-e2f547172abf",
+		"name": "app-proxy-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1029946",
+		"_collection_link": "https://cloudy-spaceship-2566.postman.co/workspace/Team-Workspace~0eae541b-05f0-45f8-8239-5098fc53d0aa/collection/1029946-f5dd3002-cbc5-482f-9a34-e2f547172abf?action=share&source=collection_link&creator=1029946"
+	},
+	"item": [
+		{
+			"name": "Call proxy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{app-proxy-service-host}}:{{app-proxy-service-port}}/v1/proxy",
+					"protocol": "http",
+					"host": [
+						"{{app-proxy-service-host}}"
+					],
+					"port": "{{app-proxy-service-port}}",
+					"path": [
+						"v1",
+						"proxy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
