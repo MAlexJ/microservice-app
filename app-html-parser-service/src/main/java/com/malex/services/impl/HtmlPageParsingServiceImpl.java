@@ -9,6 +9,7 @@ import com.malex.services.AbstractParsingService;
 import com.malex.services.ElementConversionService;
 import com.malex.services.HtmlPageParsingService;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -49,11 +50,17 @@ public class HtmlPageParsingServiceImpl extends AbstractParsingService
     if (response.getState() == ResponseState.FALLBACK) {
       return Mono.fromSupplier(() -> new HtmlParserResponse("", ResponseState.FALLBACK));
     }
-    return Mono.fromSupplier(
-        () -> {
-          Document document = Jsoup.parse(response.getHtmlAsText());
-          Elements elements = document.selectXpath(xpath);
-          return new HtmlParserResponse(elements.html(), ResponseState.SERVICE);
-        });
+    return Optional.ofNullable(xpath)
+        .map(
+            xp ->
+                Mono.fromSupplier(
+                    () -> {
+                      Document document = Jsoup.parse(response.getHtmlAsText());
+                      Elements elements = document.selectXpath(xpath);
+                      return new HtmlParserResponse(elements.html(), ResponseState.SERVICE);
+                    }))
+        .orElse(
+            Mono.fromSupplier(
+                () -> new HtmlParserResponse(response.getHtmlAsText(), ResponseState.SERVICE)));
   }
 }
