@@ -10,13 +10,14 @@ eureka:
     instance-id: ${spring.application.name}
     prefer-ip-address: true
 
-proxy:
-  service:
-    url: ${APP_HTML_SERVICE_PROXY_URL:https://eu-central-1.aws.data.mongodb-api.com/app}
-    secret: ${APP_HTML_SERVICE_PROXY_SECRET:proxy_secret}
-
 html:
   bill-search-url: ${APP_HTML_SERVICE_SEARCH_BILL_URL:https://itd.rada.gov.ua/billInfo/Bills/searchResults}
+
+proxy-service:
+  application:
+    name: app-proxy-service
+  endpoint:
+    proxy: /v1/proxy
 
 management:
   health.circuitbreakers.enabled: true
@@ -29,15 +30,3 @@ management:
 springdoc:
   swagger-ui:
     path: /
-
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      registerHealthIndicator: true
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      permittedNumberOfCallsInHalfOpenState: 3
-      automaticTransitionFromOpenToHalfOpenEnabled: true
-      waitDurationInOpenState: 5s
-      failureRateThreshold: 50
-      eventConsumerBufferSize: 10

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.malex.models.base.BillStatus;
 import java.time.LocalDate;
 import java.util.List;
-
-import com.malex.models.base.ResponseState;
 import lombok.Data;
 
 @Data
@@ -25,7 +23,4 @@ public class BillResponse {
 
   @JsonProperty("statuses")
   private List<BillStatus> statuses;
-
-  @JsonProperty("state")
-  private ResponseState state;
 }

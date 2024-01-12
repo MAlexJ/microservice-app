@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -55,7 +54,7 @@ public abstract class AbstractParsingService {
             els ->
                 Optional.of(els.getElementsByTag(TD_ELEMENT))
                     .orElseThrow(buildError(ERROR_MSG_ELEMENT_BY_TAG_NOT_FOUND, TD_ELEMENT)))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   protected Elements parseEuroBoxElements(Document document) {

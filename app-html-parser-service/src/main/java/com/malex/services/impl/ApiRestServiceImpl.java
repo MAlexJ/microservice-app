@@ -1,14 +1,12 @@
 package com.malex.services.impl;
 
 import com.malex.models.base.FormUrlencodedData;
-import com.malex.services.AbstractRestService;
 import com.malex.services.ApiRestService;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,10 +18,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ApiRestServiceImpl extends AbstractRestService implements ApiRestService {
-
-  @Value("${html.bill-search-url}")
-  private String searchBillUrl;
+public class ApiRestServiceImpl implements ApiRestService {
 
   private final WebClient webClient;
 
@@ -39,17 +34,6 @@ public class ApiRestServiceImpl extends AbstractRestService implements ApiRestSe
         .uri(url)
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         .body(BodyInserters.fromFormData(convertFromDataToMultiValueMap(formData)))
-        .retrieve()
-        .bodyToMono(String.class);
-  }
-
-  @Override
-  public Mono<String> fetchSearchResult(MultiValueMap<String, String> formData) {
-    return webClient
-        .post()
-        .uri(searchBillUrl)
-        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        .body(BodyInserters.fromFormData(formData))
         .retrieve()
         .bodyToMono(String.class);
   }

@@ -1,6 +1,7 @@
 package com.malex.mapper;
 
 import com.malex.models.request.BillRequest;
+import com.malex.models.request.ProxyRequest;
 import com.malex.models.response.BillResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,6 +11,8 @@ import org.mapstruct.Mapping;
 public interface ObjectMapper {
 
   @Mapping(target = "statuses", ignore = true)
-  @Mapping(target = "state", ignore = true)
   BillResponse convertToResponse(BillRequest request);
+
+  @Mapping(target = "url", source = "link")
+  ProxyRequest convertBillRequestToProxyRequest(BillRequest request);
 }

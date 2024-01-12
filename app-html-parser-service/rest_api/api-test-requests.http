@@ -20,10 +20,32 @@ Accept: application/json
     }
 %}
 
-###
+### Find bills by criteria
+POST http://localhost:{{app-http-parser-service-port}}/v1/searchResults
+Content-Type: application/json
+
+{
+  "link": "https://itd.rada.gov.ua/billInfo/Bills/searchResults",
+  "formUrlencodedData": [
+    {
+      "key": "BillSearchModel.registrationNumber",
+      "value": "9672"
+    },
+    {
+      "key": "BillSearchModel.registrationNumberCompareOperation",
+      "value": "2"
+    }
+  ]
+}
+
+
+### Find bill statuses
 POST http://localhost:{{app-http-parser-service-port}}/v1/bills
 Content-Type: application/json
 
 {
-  "url": "https://itd.rada.gov.ua/billInfo/Bills/Card/42664"
+  "link": "https://itd.rada.gov.ua/billInfo/Bills/Card/42664",
+  "number": "9672",
+  "name": "text description",
+  "registrationDate": "2023-09-04"
 }

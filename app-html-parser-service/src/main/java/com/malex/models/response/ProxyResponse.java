@@ -43,7 +43,7 @@ public class ProxyResponse {
   private ProxyBody body;
 
   @JsonProperty("state")
-  private ResponseState state = ResponseState.PROXY;
+  private ResponseState state;
 
   public String getHtmlAsText() {
     return Optional.ofNullable(getBody())
