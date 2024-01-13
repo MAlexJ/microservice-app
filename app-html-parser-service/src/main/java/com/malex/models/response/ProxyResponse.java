@@ -66,7 +66,7 @@ public class ProxyResponse {
   }
 
   @Data
-  private static class ProxyHeaders {
+  public static class ProxyHeaders {
 
     @JsonProperty("Content-Type")
     private List<String> contentType;

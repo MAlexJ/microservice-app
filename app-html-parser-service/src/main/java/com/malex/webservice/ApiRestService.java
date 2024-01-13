@@ -1,7 +1,6 @@
-package com.malex.services.impl;
+package com.malex.webservice;
 
 import com.malex.models.base.FormUrlencodedData;
-import com.malex.services.ApiRestService;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,16 +17,10 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ApiRestServiceImpl implements ApiRestService {
+public class ApiRestService {
 
   private final WebClient webClient;
 
-  @Override
-  public Mono<String> fetchBillStatus(String url) {
-    return webClient.get().uri(url).retrieve().bodyToMono(String.class);
-  }
-
-  @Override
   public Mono<String> fetchSearchResult(String url, List<FormUrlencodedData> formData) {
     return webClient
         .post()

@@ -2,7 +2,9 @@ package com.malex.services;
 
 import com.malex.mapper.ObjectMapper;
 import com.malex.models.request.BillRequest;
+import com.malex.models.request.SearchRequest;
 import com.malex.models.response.ProxyResponse;
+import com.malex.webservice.ApiRestService;
 import com.malex.webservice.ProxyWebService;
 import java.util.Base64;
 import java.util.Optional;
@@ -15,13 +17,17 @@ import reactor.core.publisher.Mono;
 public class ProxyService {
 
   private final ObjectMapper mapper;
-
+  private final ApiRestService restService;
   private final ProxyWebService webService;
 
   public Mono<String> fetchProxyRequest(BillRequest request) {
     return webService
         .fetchBillStatus(mapper.convertBillRequestToProxyRequest(request))
         .map(this::decodeBase64ToHtml);
+  }
+
+  public Mono<String> fetchSearchResult(SearchRequest request) {
+    return restService.fetchSearchResult(request.getLink(), request.getFormUrlencodedData());
   }
 
   private String decodeBase64ToHtml(ProxyResponse response) {

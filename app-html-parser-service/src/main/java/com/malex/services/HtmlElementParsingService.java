@@ -1,9 +1,7 @@
-package com.malex.services.impl;
+package com.malex.services;
 
 import com.malex.models.base.Bill;
 import com.malex.models.base.BillStatus;
-import com.malex.services.AbstractParsingService;
-import com.malex.services.ElementConversionService;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -13,16 +11,13 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 @Service
-public class ElementConversionServiceImpl extends AbstractParsingService
-    implements ElementConversionService {
+public class HtmlElementParsingService extends AbstractParsingService {
 
-  @Override
   public Flux<BillStatus> convertElementsToBillStatuses(List<Elements> elements) {
     List<BillStatus> statuses = elements.stream().map(this::buildBillStatusObj).toList();
     return Flux.fromIterable(statuses);
   }
 
-  @Override
   public Flux<Bill> convertElementsToBills(List<Elements> elements) {
     List<Bill> bills = elements.stream().map(this::buildBillObj).toList();
     return Flux.fromIterable(bills);

@@ -31,8 +31,6 @@ public class ProxyWebService {
 
   public Mono<ProxyResponse> fetchBillStatus(ProxyRequest request) {
     log.info("HTTP Proxy request - {}", request);
-    var uri = buildProxyServiceUri();
-    log.info("HTTP Proxy uri - {}", uri);
     return webClient
         .post()
         .uri(buildProxyServiceUri())

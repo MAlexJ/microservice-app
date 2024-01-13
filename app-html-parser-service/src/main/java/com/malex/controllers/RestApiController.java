@@ -7,7 +7,6 @@ import com.malex.models.request.BillRequest;
 import com.malex.models.request.SearchRequest;
 import com.malex.models.response.BillResponse;
 import com.malex.models.response.SearchResponse;
-import com.malex.services.ApiRestService;
 import com.malex.services.HtmlPageParsingService;
 import com.malex.services.ProxyService;
 import java.util.List;
@@ -22,11 +21,11 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/v1")
 public class RestApiController {
 
+  // remove it !!!!
   private final ObjectMapper mapper;
-  private final ApiRestService restService;
-  private final HtmlPageParsingService parsingService;
 
   private final ProxyService proxyService;
+  private final HtmlPageParsingService parsingService;
 
   /**
    * Find bills by criteria:
@@ -36,8 +35,8 @@ public class RestApiController {
   @PostMapping("/searchResults")
   public Mono<SearchResponse> findBillsByCriteria(@RequestBody SearchRequest request) {
     log.info("Start processing search bills, request - {}", request);
-    return restService
-        .fetchSearchResult(request.getLink(), request.getFormUrlencodedData())
+    return proxyService
+        .fetchSearchResult(request)
         .doOnNext(message -> log.info("Processing html page with Html/Jsoup parsing service"))
         .flatMapMany(parsingService::processBillSearchResult)
         .collectList()
