@@ -32,7 +32,7 @@ public class RestApiController extends AbstractRestApiController {
     log.info("HTTP: find bills, request - {}", request);
     return proxyService
         .redirectRequestToProxyWebservice(request)
-        .flatMapMany(parsingService::processBillSearchResult)
+        .flatMapMany(parsingService::htmlProcessingBills)
         .collectList()
         .map(this::buildSuccessfulResponse)
         .doOnNext(message -> log.info("HTTP: find bills, response - {}", message))
@@ -50,7 +50,7 @@ public class RestApiController extends AbstractRestApiController {
     log.info("HTTP: find bill statuses, request - {}", request);
     return proxyService
         .redirectRequestToProxyWebservice(request)
-        .flatMapMany(parsingService::processBillStatus)
+        .flatMapMany(parsingService::htmlProcessingBillStatus)
         .collectList()
         .map(statuses -> buildSuccessfulResponseEntity(request, statuses))
         .doOnNext(message -> log.info("HTTP: find bill statuses, response - {}", message))

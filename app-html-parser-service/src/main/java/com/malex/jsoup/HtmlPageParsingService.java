@@ -17,7 +17,13 @@ public class HtmlPageParsingService extends AbstractParsingService {
 
   private HtmlElementParsingService conversionService;
 
-  public Flux<BillStatus> processBillStatus(String html) {
+  /**
+   * Html Processing and Syntax Bill Statuses Analysis
+   *
+   * @param html text as html from proxy webservice
+   * @return bill statuses
+   */
+  public Flux<BillStatus> htmlProcessingBillStatus(String html) {
     Document document = Jsoup.parse(html);
     Element tableElement = parseNavTab1Element(document, Element::firstElementChild);
     Element tbody = parseTBodyElement(tableElement, Elements::first);
@@ -26,7 +32,13 @@ public class HtmlPageParsingService extends AbstractParsingService {
     return conversionService.convertElementsToBillStatuses(tdElements);
   }
 
-  public Flux<Bill> processBillSearchResult(String html) {
+  /**
+   * Html Processing and Syntax Bill Analysis
+   *
+   * @param html text as html from proxy webservice
+   * @return list of bills
+   */
+  public Flux<Bill> htmlProcessingBills(String html) {
     Document document = Jsoup.parse(html);
     Elements elements = parseEuroBoxElements(document);
     List<Elements> list = parseTableElements(elements);
