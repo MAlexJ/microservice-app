@@ -1,8 +1,10 @@
 package com.malex.model.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.malex.model.api.request.BillStatusesRequest;
 import com.malex.model.base.BillStatus;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import lombok.Data;
 

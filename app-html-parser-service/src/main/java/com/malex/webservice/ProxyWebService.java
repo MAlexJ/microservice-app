@@ -1,5 +1,6 @@
 package com.malex.webservice;
 
+import com.malex.exception.FallbackException;
 import com.malex.model.base.ResponseState;
 import com.malex.model.proxy.request.BillStatusesProxyRequest;
 import com.malex.model.proxy.response.ProxyResponse;
@@ -46,14 +47,18 @@ public class ProxyWebService {
         .bodyValue(request)
         .retrieve()
         .bodyToMono(ProxyResponse.class)
+        .doOnNext(this::handleFallBackState)
         .doOnNext(
-            response -> {
-              String message = "HTTP Proxy state - {}, response - {}";
-              if (ResponseState.FALLBACK == response.getState()) {
-                log.warn(message, response.getState(), response);
-              }
-              log.info(message, response.getState(), response);
-            });
+            response ->
+                log.info("HTTP Proxy state - {}, response - {}", response.getState(), response));
+  }
+
+  private void handleFallBackState(ProxyResponse response) {
+    if (ResponseState.FALLBACK == response.getState()) {
+      String errorMsg = String.format("Proxy webservice in %s state", ResponseState.FALLBACK);
+      log.warn(errorMsg);
+      throw new FallbackException(errorMsg);
+    }
   }
 
   private URI buildProxyServiceUri(String path) {

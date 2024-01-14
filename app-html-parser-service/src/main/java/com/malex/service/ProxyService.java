@@ -1,10 +1,8 @@
 package com.malex.service;
 
-import com.malex.exception.FallbackException;
 import com.malex.mapper.ObjectMapper;
 import com.malex.model.api.request.BillStatusesRequest;
 import com.malex.model.api.request.BillsRequest;
-import com.malex.model.base.ResponseState;
 import com.malex.model.proxy.response.ProxyResponse;
 import com.malex.webservice.ProxyWebService;
 import java.util.Base64;
@@ -22,7 +20,7 @@ public class ProxyService {
   private final ProxyWebService webService;
   private final ObjectMapper mapper;
 
-  public <T> Mono<String> redirectApiRequestToProxyWebservice(T request) {
+  public <T> Mono<String> redirectRequestToProxyWebservice(T request) {
     if (request instanceof BillStatusesRequest billStatusesRequest) {
       return webService
           .fetchBillStatus(mapper.convertBillRequestToProxyRequest(billStatusesRequest))
@@ -34,11 +32,6 @@ public class ProxyService {
   }
 
   private String decodeBase64ToHtml(ProxyResponse response) {
-    if (ResponseState.FALLBACK == response.getState()) {
-      String errorMsg = String.format("Proxy webservice in %s state", ResponseState.FALLBACK);
-      log.warn(errorMsg);
-      throw new FallbackException(errorMsg);
-    }
     return Optional.ofNullable(response.getBody())
         .map(ProxyResponse.ProxyBody::getData)
         .map(data -> Base64.getDecoder().decode(data))

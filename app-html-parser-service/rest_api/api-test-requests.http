@@ -21,7 +21,7 @@ Accept: application/json
 %}
 
 ### Find bills by criteria
-POST http://localhost:{{app-http-parser-service-port}}/v1/searchResults
+POST http://localhost:{{app-http-parser-service-port}}/v1/bills
 Content-Type: application/json
 
 {
@@ -40,7 +40,7 @@ Content-Type: application/json
 
 
 ### Find bill statuses
-POST http://localhost:{{app-http-parser-service-port}}/v1/bills
+POST http://localhost:{{app-http-parser-service-port}}/v1/bill/statuses
 Content-Type: application/json
 
 {
@@ -51,8 +51,29 @@ Content-Type: application/json
 }
 
 
-### Fail : Find bill statuses
+
+### Fail: Find bills by criteria
 POST http://localhost:{{app-http-parser-service-port}}/v1/bills
+Content-Type: application/json
+
+{
+  "url": "https://itd.rada.gov2.ua/billInfo/Bills/searchResults",
+  "formUrlencodedData": [
+    {
+      "key": "BillSearchModel.registrationNumber",
+      "value": "9672"
+    },
+    {
+      "key": "BillSearchModel.registrationNumberCompareOperation",
+      "value": "2"
+    }
+  ]
+}
+
+
+
+### Fail : Find bill statuses
+POST http://localhost:{{app-http-parser-service-port}}/v1/bill/statuses
 Content-Type: application/json
 
 {
