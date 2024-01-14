@@ -18,8 +18,8 @@ import reactor.core.publisher.Mono;
 public class RestApiController extends AbstractRestApiController {
 
   public RestApiController(
-      HtmlPageParsingService parsingService, ProxyService proxyService, ObjectMapper mapper) {
-    super(parsingService, proxyService, mapper);
+      HtmlPageParsingService htmlService, ProxyService proxyService, ObjectMapper mapper) {
+    super(htmlService, proxyService, mapper);
   }
 
   /**
@@ -36,7 +36,7 @@ public class RestApiController extends AbstractRestApiController {
         .collectList()
         .map(this::buildSuccessfulResponse)
         .doOnNext(message -> log.info("HTTP: find bills, response - {}", message))
-        .onErrorResume(throwable -> handleFallbackResponse(throwable, BillsResponse.buildEmpty()));
+        .onErrorResume(throwable -> handleFallbackResponse(throwable, buildFallbackResponse()));
   }
 
   /**
@@ -52,8 +52,9 @@ public class RestApiController extends AbstractRestApiController {
         .redirectRequestToProxyWebservice(request)
         .flatMapMany(parsingService::processBillStatus)
         .collectList()
-        .map(statuses -> buildResponseEntity(request, statuses))
+        .map(statuses -> buildSuccessfulResponseEntity(request, statuses))
         .doOnNext(message -> log.info("HTTP: find bill statuses, response - {}", message))
-        .onErrorResume(throwable -> handleFallbackResponse(throwable, buildResponse(request)));
+        .onErrorResume(
+            throwable -> handleFallbackResponse(throwable, buildFallbackResponse(request)));
   }
 }

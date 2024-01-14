@@ -24,20 +24,22 @@ public abstract class AbstractRestApiController {
   protected final ProxyService proxyService;
   private final ObjectMapper mapper;
 
-  protected ResponseEntity<BillStatusesResponse> buildResponseEntity(
+  protected ResponseEntity<BillStatusesResponse> buildSuccessfulResponseEntity(
       BillStatusesRequest request, List<BillStatus> statuses) {
     return new ResponseEntity<>(buildResponse(request, statuses), HttpStatus.OK);
   }
 
-  protected BillStatusesResponse buildResponse(BillStatusesRequest request) {
+  protected BillStatusesResponse buildFallbackResponse(BillStatusesRequest request) {
     return buildResponse(request, Collections.emptyList());
   }
 
-  protected BillStatusesResponse buildResponse(
+  protected BillsResponse buildFallbackResponse() {
+    return new BillsResponse(Collections.emptyList());
+  }
+
+  private BillStatusesResponse buildResponse(
       BillStatusesRequest request, List<BillStatus> statuses) {
-    var response = mapper.convertToResponse(request);
-    response.setStatuses(statuses);
-    return response;
+    return mapper.convertToResponse(request).fetchStatuses(statuses);
   }
 
   protected ResponseEntity<BillsResponse> buildSuccessfulResponse(List<Bill> bills) {

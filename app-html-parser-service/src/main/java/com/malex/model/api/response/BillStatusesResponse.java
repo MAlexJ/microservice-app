@@ -25,4 +25,9 @@ public class BillStatusesResponse {
 
   @JsonProperty("statuses")
   private List<BillStatus> statuses;
+
+  public BillStatusesResponse fetchStatuses(List<BillStatus> statuses) {
+    this.setStatuses(statuses);
+    return this;
+  }
 }

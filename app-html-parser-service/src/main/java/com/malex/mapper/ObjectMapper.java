@@ -13,6 +13,7 @@ import org.mapstruct.Mapping;
 public interface ObjectMapper {
 
   @Mapping(target = "statuses", ignore = true)
+  @Mapping(target = "fetchStatuses", ignore = true)
   BillStatusesResponse convertToResponse(BillStatusesRequest request);
 
   BillStatusesProxyRequest convertBillRequestToProxyRequest(BillStatusesRequest request);

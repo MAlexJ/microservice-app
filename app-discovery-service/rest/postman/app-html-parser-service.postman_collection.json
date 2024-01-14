@@ -14,7 +14,37 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"link\":\"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\",\r\n   \"number\":\"9672\",\r\n   \"name\":\"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\r\n   \"registrationDate\":\"2023-09-04\"\r\n}",
+					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/Card/42664\",\r\n   \"number\":\"9672\",\r\n   \"name\":\"Проект Закону про внесення змін до статті 23 Закону України \\\"Про мобілізаційну підготовку та мобілізацію\\\"\",\r\n   \"registrationDate\":\"2023-09-04\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/v1/bill/statuses",
+					"protocol": "http",
+					"host": [
+						"{{app-http-parser-service-host}}"
+					],
+					"port": "{{app-http-parser-service-port}}",
+					"path": [
+						"v1",
+						"bill",
+						"statuses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find bills by creteria",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/searchResults\",\r\n   \"formUrlencodedData\":[\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumber\",\r\n         \"value\":\"9672\"\r\n      },\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumberCompareOperation\",\r\n         \"value\":\"2\"\r\n      }\r\n   ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -31,35 +61,6 @@
 					"path": [
 						"v1",
 						"bills"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find bills by creteria",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n   \"link\":\"https://itd.rada.gov.ua/billInfo/Bills/searchResults\",\r\n   \"formUrlencodedData\":[\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumber\",\r\n         \"value\":\"9672\"\r\n      },\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumberCompareOperation\",\r\n         \"value\":\"2\"\r\n      }\r\n   ]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/v1/searchResults",
-					"protocol": "http",
-					"host": [
-						"{{app-http-parser-service-host}}"
-					],
-					"port": "{{app-http-parser-service-port}}",
-					"path": [
-						"v1",
-						"searchResults"
 					]
 				}
 			},
