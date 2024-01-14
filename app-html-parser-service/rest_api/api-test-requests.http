@@ -49,3 +49,15 @@ Content-Type: application/json
   "name": "text description",
   "registrationDate": "2023-09-04"
 }
+
+
+### Fail : Find bill statuses
+POST http://localhost:{{app-http-parser-service-port}}/v1/bills
+Content-Type: application/json
+
+{
+  "url": "https://jsoup2.org/cookbook2/extracting-data/selector-syntax",
+  "number": "9672",
+  "name": "text description",
+  "registrationDate": "2023-09-04"
+}
