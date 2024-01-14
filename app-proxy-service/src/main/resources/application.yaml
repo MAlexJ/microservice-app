@@ -13,6 +13,9 @@ eureka:
 proxy:
   service:
     url: ${APP_PROXY_SERVICE_PROXY_URL:https://eu-central-1.aws.data.mongodb-api.com/app}
+    endpoint:
+      #      bills: ${APP_PROXY_SERVICE_PROXY_ENDPOINT_BILLS:bills}
+      statuses: ${APP_PROXY_SERVICE_PROXY_ENDPOINT_STATUSES:bill/statuses}
     secret: ${APP_PROXY_SERVICE_PROXY_SECRET:proxy_secret}
 
 management:

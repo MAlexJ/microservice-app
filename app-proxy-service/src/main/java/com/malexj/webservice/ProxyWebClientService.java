@@ -27,6 +27,9 @@ public class ProxyWebClientService implements IProxyWebClientService {
   @Value("${proxy.service.url}")
   private String proxyServiceUrl;
 
+  @Value("${proxy.service.endpoint.statuses}")
+  private String proxyServiceEndpoint;
+
   @Value("${proxy.service.secret}")
   private String proxyServiceSecret;
 
@@ -62,6 +65,7 @@ public class ProxyWebClientService implements IProxyWebClientService {
 
   private URI buildUriComponent() {
     return UriComponentsBuilder.fromUriString(proxyServiceUrl)
+        .pathSegment(proxyServiceEndpoint)
         .queryParam(PROXY_URI_QUERY_PARAM, proxyServiceSecret)
         .build()
         .toUri();

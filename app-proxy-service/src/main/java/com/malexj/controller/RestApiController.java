@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1")
+@RequestMapping("/v1/proxy")
 public class RestApiController {
 
   private static final String LOG_REQUEST_MESSAGE = "HTTP API request - {}";
@@ -27,7 +27,7 @@ public class RestApiController {
   private final IProxyService service;
 
   @Operation(summary = "Proxy service HTML representation")
-  @PostMapping("/proxy")
+  @PostMapping("/bill/statuses")
   public Mono<ResponseEntity<RestApiResponse>> proxy(@RequestBody RestApiRequest request) {
     log.info(LOG_REQUEST_MESSAGE, request);
     return service

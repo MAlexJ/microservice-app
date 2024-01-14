@@ -20,17 +20,37 @@ Accept: application/json
     }
 %}
 
-### Test successufl case
-POST http://localhost:{{app-proxy-service-port}}/v1/proxy
+### Test successufl case find bill statuses
+POST http://localhost:{{app-proxy-service-port}}/v1/proxy/bill/statuses
 Content-Type: application/json
 
 {
-   "url":"https://jsoup.org/cookbook/extracting-data/selector-syntax"
+   "url":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664"
 }
 
 
+### Test successufl case find bill by creteria
+POST http://localhost:{{app-proxy-service-port}}/v1/proxy/bills
+Content-Type: application/json
+
+{
+  "url":"https://itd.rada.gov.ua/billInfo/Bills/searchResults",
+  "formUrlencodedData":[
+    {
+      "key":"BillSearchModel.registrationNumber",
+      "value":"9672"
+    },
+    {
+      "key":"BillSearchModel.registrationNumberCompareOperation",
+      "value":"2"
+    }
+  ]
+}
+
+
+
 ### Test failure case
-POST http://localhost:{{app-proxy-service-port}}/v1/proxy
+POST http://localhost:{{app-proxy-service-port}}/v1/proxy/bill/statuses
 Content-Type: application/json
 
 {

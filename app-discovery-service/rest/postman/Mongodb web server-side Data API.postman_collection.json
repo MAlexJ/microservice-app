@@ -81,7 +81,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://eu-central-1.aws.data.mongodb-api.com/app/http-processing-gdxaz/endpoint/v1/atlas/proxy/bill/stautes?secret={{secret}}",
+					"raw": "https://eu-central-1.aws.data.mongodb-api.com/app/http-processing-gdxaz/endpoint/v1/atlas/proxy/bill/statuses?secret={{secret}}",
 					"protocol": "https",
 					"host": [
 						"eu-central-1",
@@ -98,7 +98,7 @@
 						"atlas",
 						"proxy",
 						"bill",
-						"stautes"
+						"statuses"
 					],
 					"query": [
 						{
