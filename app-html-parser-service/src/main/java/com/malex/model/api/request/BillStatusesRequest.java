@@ -1,4 +1,4 @@
-package com.malex.models.request;
+package com.malex.model.api.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import lombok.Data;
  * <pre>
  *     <code>
  * {
- *         "link":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664",
+ *         "url":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664",
  *         "number":"9672",
  *          "name":"Name of bill",
  *          "registrationDate":"2023-09-04"
@@ -19,10 +19,11 @@ import lombok.Data;
  * </pre>
  */
 @Data
-public class BillRequest {
+public class BillStatusesRequest {
 
-  @JsonProperty("link")
-  private String link;
+  /** Url contains bill number and link to resources */
+  @JsonProperty("url")
+  private String url;
 
   @JsonProperty("name")
   private String name;

@@ -1,10 +1,9 @@
-package com.malex.services;
+package com.malex.service;
 
 import com.malex.mapper.ObjectMapper;
-import com.malex.models.request.BillRequest;
-import com.malex.models.request.SearchRequest;
-import com.malex.models.response.ProxyResponse;
-import com.malex.webservice.ApiRestService;
+import com.malex.model.api.request.BillStatusesRequest;
+import com.malex.model.api.request.BillsRequest;
+import com.malex.model.proxy.response.ProxyResponse;
 import com.malex.webservice.ProxyWebService;
 import java.util.Base64;
 import java.util.Optional;
@@ -16,18 +15,18 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ProxyService {
 
-  private final ObjectMapper mapper;
-  private final ApiRestService restService;
   private final ProxyWebService webService;
+  private final ObjectMapper mapper;
 
-  public Mono<String> fetchProxyRequest(BillRequest request) {
+  public <T> Mono<String> redirectApiRequestToProxyWebservice(T request) {
+    if (request instanceof BillStatusesRequest billStatusesRequest) {
+      return webService
+          .fetchBillStatus(mapper.convertBillRequestToProxyRequest(billStatusesRequest))
+          .map(this::decodeBase64ToHtml);
+    }
     return webService
-        .fetchBillStatus(mapper.convertBillRequestToProxyRequest(request))
+        .fetchBillStatus(mapper.convertBillsRequestToProxyRequest((BillsRequest) request))
         .map(this::decodeBase64ToHtml);
-  }
-
-  public Mono<String> fetchSearchResult(SearchRequest request) {
-    return restService.fetchSearchResult(request.getLink(), request.getFormUrlencodedData());
   }
 
   private String decodeBase64ToHtml(ProxyResponse response) {

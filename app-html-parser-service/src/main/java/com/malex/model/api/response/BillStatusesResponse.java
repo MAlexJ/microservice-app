@@ -1,16 +1,16 @@
-package com.malex.models.response;
+package com.malex.model.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.malex.models.base.BillStatus;
+import com.malex.model.base.BillStatus;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 
 @Data
-public class BillResponse {
+public class BillStatusesResponse {
 
-  @JsonProperty("link")
-  private String link;
+  @JsonProperty("url")
+  private String url;
 
   @JsonProperty("name")
   private String name;

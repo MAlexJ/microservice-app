@@ -1,7 +1,7 @@
-package com.malex.services;
+package com.malex.jsoup;
 
-import com.malex.models.base.Bill;
-import com.malex.models.base.BillStatus;
+import com.malex.model.base.Bill;
+import com.malex.model.base.BillStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;

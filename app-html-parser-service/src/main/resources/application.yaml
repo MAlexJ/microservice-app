@@ -10,14 +10,12 @@ eureka:
     instance-id: ${spring.application.name}
     prefer-ip-address: true
 
-html:
-  bill-search-url: ${APP_HTML_SERVICE_SEARCH_BILL_URL:https://itd.rada.gov.ua/billInfo/Bills/searchResults}
-
 proxy-service:
   application:
     name: app-proxy-service
   endpoint:
     proxy:
+      bills: /v1/bills
       statuses: /v1/bill/statuses
 
 management:

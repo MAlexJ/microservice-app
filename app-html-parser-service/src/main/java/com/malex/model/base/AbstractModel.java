@@ -1,4 +1,4 @@
-package com.malex.models.base;
+package com.malex.model.base;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

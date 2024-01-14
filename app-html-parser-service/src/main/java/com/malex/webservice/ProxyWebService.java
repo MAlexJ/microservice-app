@@ -1,7 +1,8 @@
 package com.malex.webservice;
 
-import com.malex.models.request.ProxyRequest;
-import com.malex.models.response.ProxyResponse;
+import com.malex.model.base.ResponseState;
+import com.malex.model.proxy.request.BillStatusesProxyRequest;
+import com.malex.model.proxy.response.ProxyResponse;
 import com.netflix.discovery.EurekaClient;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -23,27 +24,41 @@ public class ProxyWebService {
 
   @Lazy private final EurekaClient eurekaClient;
 
+  @Value("${proxy-service.endpoint.proxy.bills}")
+  private String billsEndpoint;
+
   @Value("${proxy-service.endpoint.proxy.statuses}")
-  private String endpoint;
+  private String billStatusesEndpoint;
 
   @Value("${proxy-service.application.name}")
   private String virtualHostname;
 
-  public Mono<ProxyResponse> fetchBillStatus(ProxyRequest request) {
-    log.info("HTTP Proxy request - {}", request);
+  public <T> Mono<ProxyResponse> fetchBillStatus(T request) {
+    URI uri =
+        (request instanceof BillStatusesProxyRequest)
+            ? buildProxyServiceUri(billStatusesEndpoint)
+            : buildProxyServiceUri(billsEndpoint);
+    log.info("HTTP Proxy request - {}, uri - {}", request, uri);
     return webClient
         .post()
-        .uri(buildProxyServiceUri())
+        .uri(uri)
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(request)
         .retrieve()
         .bodyToMono(ProxyResponse.class)
-        .doOnNext(response -> log.info("HTTP Proxy response - {}", response));
+        .doOnNext(
+            response -> {
+              String message = "HTTP Proxy state - {}, response - {}";
+              if (ResponseState.FALLBACK == response.getState()) {
+                log.warn(message, response.getState(), response);
+              }
+              log.info(message, response.getState(), response);
+            });
   }
 
-  private URI buildProxyServiceUri() {
+  private URI buildProxyServiceUri(String path) {
     return UriComponentsBuilder.fromUriString(discoveryServiceUrl(virtualHostname))
-        .path(endpoint)
+        .path(path)
         .build()
         .toUri();
   }

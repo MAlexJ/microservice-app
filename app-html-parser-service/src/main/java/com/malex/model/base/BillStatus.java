@@ -1,4 +1,4 @@
-package com.malex.models.base;
+package com.malex.model.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;

@@ -1,10 +1,8 @@
-package com.malex.models.response;
+package com.malex.model.proxy.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.malex.models.base.ResponseState;
-import java.util.Base64;
+import com.malex.model.base.ResponseState;
 import java.util.List;
-import java.util.Optional;
 import lombok.Data;
 
 /**
@@ -44,14 +42,6 @@ public class ProxyResponse {
 
   @JsonProperty("state")
   private ResponseState state;
-
-  public String getHtmlAsText() {
-    return Optional.ofNullable(getBody())
-        .map(ProxyBody::getData)
-        .map(data -> Base64.getDecoder().decode(data))
-        .map(String::new)
-        .orElseThrow();
-  }
 
   @Data
   public static class ProxyBody {

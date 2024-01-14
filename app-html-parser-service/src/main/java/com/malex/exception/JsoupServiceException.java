@@ -1,4 +1,4 @@
-package com.malex.exceptions;
+package com.malex.exception;
 
 public class JsoupServiceException extends RuntimeException {
 

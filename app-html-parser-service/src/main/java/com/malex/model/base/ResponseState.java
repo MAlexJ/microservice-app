@@ -1,4 +1,4 @@
-package com.malex.models.base;
+package com.malex.model.base;
 
 public enum ResponseState {
   FALLBACK,

@@ -1,6 +1,6 @@
-package com.malex.services;
+package com.malex.jsoup;
 
-import com.malex.exceptions.JsoupServiceException;
+import com.malex.exception.JsoupServiceException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;

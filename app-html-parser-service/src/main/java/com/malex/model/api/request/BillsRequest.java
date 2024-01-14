@@ -1,6 +1,5 @@
-package com.malex.models.request;
+package com.malex.model.api.request;
 
-import com.malex.models.base.FormUrlencodedData;
 import java.util.List;
 import lombok.Data;
 
@@ -9,7 +8,7 @@ import lombok.Data;
  *
  * <pre>
  *     <code>{
- *        "link":"https://itd.rada.gov.ua/billInfo/Bills/searchResults",
+ *        "url":"https://itd.rada.gov.ua/billInfo/Bills/searchResults",
  *        "formUrlencodedData":[
  *            {"key":"BillSearchModel.registrationNumber", "value":"9672" },
  *            {"key":"BillSearchModel.registrationNumberCompareOperation","value":"2" }
@@ -19,14 +18,10 @@ import lombok.Data;
  * </pre>
  */
 @Data
-public class SearchRequest {
+public class BillsRequest {
 
-  /**
-   * link to site url:
-   *
-   * <p>link: https://itd.rada.gov.ua/billInfo/Bills/searchResults
-   */
-  private String link;
+  /** link to site url for search */
+  private String url;
 
   /**
    * BillSearchModel data:
@@ -42,4 +37,10 @@ public class SearchRequest {
    * </pre>
    */
   private List<FormUrlencodedData> formUrlencodedData;
+
+  @Data
+  public static class FormUrlencodedData {
+    private String key;
+    private String value;
+  }
 }
