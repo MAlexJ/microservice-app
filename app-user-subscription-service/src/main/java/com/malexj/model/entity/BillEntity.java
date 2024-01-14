@@ -1,17 +1,16 @@
 package com.malexj.model.entity;
 
-import lombok.Data;
-
 import java.time.LocalDate;
+import lombok.Data;
 
 @Data
 public class BillEntity {
 
-    private String link;
+  private String url;
 
-    private String name;
+  private String name;
 
-    private String number;
+  private String number;
 
-    private LocalDate registrationDate;
+  private LocalDate registrationDate;
 }

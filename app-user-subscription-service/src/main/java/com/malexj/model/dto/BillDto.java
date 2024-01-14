@@ -1,22 +1,21 @@
 package com.malexj.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-
 import java.time.LocalDate;
+import lombok.Data;
 
 @Data
 public class BillDto {
 
-    @JsonProperty("link")
-    private String link;
+  @JsonProperty("url")
+  private String url;
 
-    @JsonProperty("name")
-    private String name;
+  @JsonProperty("name")
+  private String name;
 
-    @JsonProperty("number")
-    private String number;
+  @JsonProperty("number")
+  private String number;
 
-    @JsonProperty("registrationDate")
-    private LocalDate registrationDate;
+  @JsonProperty("registrationDate")
+  private LocalDate registrationDate;
 }

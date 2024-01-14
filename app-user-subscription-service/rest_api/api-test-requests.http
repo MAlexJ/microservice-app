@@ -1,0 +1,72 @@
+### Pre request script
+GET http://localhost:8761/eureka/v2/apps
+Accept: application/json
+
+> {%
+    const jsonArray = response.body['applications']
+    let applications = jsonArray.application;
+    for (let i = 0; i < applications.length; i++) {
+        let inst = applications[i];
+        let name = inst.name;
+        if (name === 'APP-USER-SUBSCRIPTION-SERVICE') {
+            let host = inst.instance[0].hostName
+            let port = inst.instance[0].port.$;
+            client.log("Service name: " + name)
+            client.log("host: " + host)
+            client.global.set("app-user-subscription-service-host", host)
+            client.log("port: " + port)
+            client.global.set("app-user-subscription-service-port", port)
+        }
+    }
+%}
+
+
+###
+POST http://localhost:{{app-user-subscription-service-port}}/v1/subscriptions/subscribe
+Content-Type: application/json
+
+{
+  "active": true,
+  "user": {
+    "username": "Max1",
+    "email": "max1@mail.com"
+  },
+  "bills": [
+    {
+      "url": "https://itd.rada.gov.ua/billInfo/Bills/Card/42664",
+      "name": "Проект Закону про внесення змін до статті 23 Закону України \"Про мобілізаційну підготовку та мобілізацію\"",
+      "number": "9672",
+      "registrationDate": "2023-09-04"
+    },
+    {
+      "url": "https://itd.rada.gov.ua/billInfo/Bills/Card/42700",
+      "name": "Проект Закону про внесення змін до статті 23 Закону України \"Про мобілізаційну підготовку та мобілізацію\"",
+      "number": "9672-1",
+      "registrationDate": "2023-09-05"
+    },
+    {
+      "url": "https://itd.rada.gov.ua/billInfo/Bills/Card/42755",
+      "name": "Проект Закону про внесення змін до статті 23 Закону України \"Про мобілізаційну підготовку та мобілізацію\"",
+      "number": "9672-2",
+      "registrationDate": "2023-09-14"
+    },
+    {
+      "url": "https://itd.rada.gov.ua/billInfo/Bills/Card/42806",
+      "name": "Проект Закону про внесення змін до статті 23 Закону України \"Про мобілізаційну підготовку та мобілізацію\"",
+      "number": "9672-3",
+      "registrationDate": "2023-09-19"
+    }
+  ]
+}
+
+
+###
+POST http://localhost:{{app-user-subscription-service-port}}/v1/subscriptions/unsubscribe
+Content-Type: application/json
+
+{
+  "email": "max@mail.com"
+}
+
+###
+GET http://localhost:{{app-user-subscription-service-port}}/v1/subscriptions/active
