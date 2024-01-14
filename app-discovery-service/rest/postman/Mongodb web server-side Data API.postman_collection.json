@@ -61,7 +61,7 @@
 			"response": []
 		},
 		{
-			"name": "Http client gel bills",
+			"name": "Http client: find bill statuses",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -81,7 +81,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://eu-central-1.aws.data.mongodb-api.com/app/http-processing-gdxaz/endpoint/v1/atlas/bills?secret=65849bd1f7bc2e9e60e0c1a8",
+					"raw": "https://eu-central-1.aws.data.mongodb-api.com/app/http-processing-gdxaz/endpoint/v1/atlas/proxy/bill/stautes?secret={{secret}}",
 					"protocol": "https",
 					"host": [
 						"eu-central-1",
@@ -96,12 +96,63 @@
 						"endpoint",
 						"v1",
 						"atlas",
+						"proxy",
+						"bill",
+						"stautes"
+					],
+					"query": [
+						{
+							"key": "secret",
+							"value": "{{secret}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Http client find: Search bills by criteria",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/searchResults\",\r\n   \"formUrlencodedData\":[\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumber\",\r\n         \"value\":\"9672\"\r\n      },\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumberCompareOperation\",\r\n         \"value\":\"2\"\r\n      }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://eu-central-1.aws.data.mongodb-api.com/app/http-processing-gdxaz/endpoint/v1/atlas/proxy/bills?secret={{secret}}",
+					"protocol": "https",
+					"host": [
+						"eu-central-1",
+						"aws",
+						"data",
+						"mongodb-api",
+						"com"
+					],
+					"path": [
+						"app",
+						"http-processing-gdxaz",
+						"endpoint",
+						"v1",
+						"atlas",
+						"proxy",
 						"bills"
 					],
 					"query": [
 						{
 							"key": "secret",
-							"value": "65849bd1f7bc2e9e60e0c1a8"
+							"value": "{{secret}}"
 						}
 					]
 				}
