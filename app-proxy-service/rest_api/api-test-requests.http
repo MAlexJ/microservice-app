@@ -21,38 +21,55 @@ Accept: application/json
 %}
 
 ### Test successufl case find bill statuses
-POST http://localhost:{{app-proxy-service-port}}/v1/proxy/bill/statuses
+POST http://localhost:{{app-proxy-service-port}}/v1/bill/statuses
 Content-Type: application/json
 
 {
-   "url":"https://itd.rada.gov.ua/billInfo/Bills/Card/42664"
+  "url": "https://itd.rada.gov.ua/billInfo/Bills/Card/42664"
 }
 
 
 ### Test successufl case find bill by creteria
-POST http://localhost:{{app-proxy-service-port}}/v1/proxy/bills
+POST http://localhost:{{app-proxy-service-port}}/v1/bills
 Content-Type: application/json
 
 {
-  "url":"https://itd.rada.gov.ua/billInfo/Bills/searchResults",
-  "formUrlencodedData":[
+  "url": "https://itd.rada.gov.ua/billInfo/Bills/searchResults",
+  "formUrlencodedData": [
     {
-      "key":"BillSearchModel.registrationNumber",
-      "value":"9672"
+      "key": "BillSearchModel.registrationNumber",
+      "value": "9672"
     },
     {
-      "key":"BillSearchModel.registrationNumberCompareOperation",
-      "value":"2"
+      "key": "BillSearchModel.registrationNumberCompareOperation",
+      "value": "2"
     }
   ]
 }
 
-
-
-### Test failure case
-POST http://localhost:{{app-proxy-service-port}}/v1/proxy/bill/statuses
+### Test failure case 1
+POST http://localhost:{{app-proxy-service-port}}/v1/bill/statuses
 Content-Type: application/json
 
 {
-  "url":"https://jsoup2.org/cookbook2/extracting-data/selector-syntax"
+  "url": "https://jsoup2.org/cookbook2/extracting-data/selector-syntax"
+}
+
+
+### Test failure case 1
+POST http://localhost:{{app-proxy-service-port}}/v1/bills
+Content-Type: application/json
+
+{
+  "url": "https://jsoup2.org/cookbook2/extracting-data/selector-syntax",
+  "formUrlencodedData": [
+    {
+      "key": "BillSearchModel.registrationNumber",
+      "value": "9672"
+    },
+    {
+      "key": "BillSearchModel.registrationNumberCompareOperation",
+      "value": "2"
+    }
+  ]
 }

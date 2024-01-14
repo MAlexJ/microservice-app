@@ -23,7 +23,7 @@ public class ProxyWebService {
 
   @Lazy private final EurekaClient eurekaClient;
 
-  @Value("${proxy-service.endpoint.proxy}")
+  @Value("${proxy-service.endpoint.proxy.statuses}")
   private String endpoint;
 
   @Value("${proxy-service.application.name}")

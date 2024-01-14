@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Call proxy",
+			"name": "Find bill statuses by bill url",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -22,7 +22,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{app-proxy-service-host}}:{{app-proxy-service-port}}/v1/proxy",
+					"raw": "http://{{app-proxy-service-host}}:{{app-proxy-service-port}}/v1/bill/statuses",
 					"protocol": "http",
 					"host": [
 						"{{app-proxy-service-host}}"
@@ -30,7 +30,37 @@
 					"port": "{{app-proxy-service-port}}",
 					"path": [
 						"v1",
-						"proxy"
+						"bill",
+						"statuses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find bills by criteria",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"url\":\"https://itd.rada.gov.ua/billInfo/Bills/searchResults\",\r\n   \"formUrlencodedData\":[\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumber\",\r\n         \"value\":\"9672\"\r\n      },\r\n      {\r\n         \"key\":\"BillSearchModel.registrationNumberCompareOperation\",\r\n         \"value\":\"2\"\r\n      }\r\n   ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{app-proxy-service-host}}:{{app-proxy-service-port}}/v1/bills",
+					"protocol": "http",
+					"host": [
+						"{{app-proxy-service-host}}"
+					],
+					"port": "{{app-proxy-service-port}}",
+					"path": [
+						"v1",
+						"bills"
 					]
 				}
 			},

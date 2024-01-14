@@ -1,7 +1,7 @@
 package com.malexj.webservice;
 
 import com.malexj.model.ResponseState;
-import com.malexj.model.proxy.ProxyRequest;
+import com.malexj.model.proxy.BillStatusesProxyRequest;
 import com.malexj.model.proxy.ProxyResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.net.URI;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProxyWebClientService implements IProxyWebClientService {
+public class ProxyWebClientService {
 
   private static final String LOG_REQUEST_MESSAGE = "HTTP Proxy request - {}, url - {}";
   private static final String LOG_RESPONSE_MESSAGE = "HTTP Proxy response - {}";
@@ -25,20 +25,25 @@ public class ProxyWebClientService implements IProxyWebClientService {
   private static final String PROXY_URI_QUERY_PARAM = "secret";
 
   @Value("${proxy.service.url}")
-  private String proxyServiceUrl;
+  private String proxyWebserviceBaseUrl;
 
   @Value("${proxy.service.endpoint.statuses}")
-  private String proxyServiceEndpoint;
+  private String proxyWebserviceBillStatusesEndpoint;
+
+  @Value("${proxy.service.endpoint.bills}")
+  private String proxyWebserviceBillsEndpoint;
 
   @Value("${proxy.service.secret}")
-  private String proxyServiceSecret;
+  private String proxyWebserviceSecret;
 
   private final WebClient webClient;
 
-  @Override
   @CircuitBreaker(name = "proxy", fallbackMethod = "proxyFallbackMethod")
-  public Mono<ProxyResponse> sendDataToWebserver(ProxyRequest request) {
-    URI uri = buildUriComponent();
+  public <T> Mono<ProxyResponse> sendDataToProxy(T request) {
+    URI uri =
+        (request instanceof BillStatusesProxyRequest)
+            ? buildUriComponent(proxyWebserviceBillStatusesEndpoint)
+            : buildUriComponent(proxyWebserviceBillsEndpoint);
     log.info(LOG_REQUEST_MESSAGE, request, uri);
     return webClient
         .post()
@@ -50,7 +55,7 @@ public class ProxyWebClientService implements IProxyWebClientService {
         .doOnNext(response -> log.info(LOG_RESPONSE_MESSAGE, response));
   }
 
-  /** Fallback method for {@link IProxyWebClientService#sendDataToWebserver} */
+  /** Fallback method for {@link ProxyWebClientService#sendDataToProxy} */
   private Mono<ProxyResponse> proxyFallbackMethod(Exception ex) {
     log.error(LOG_ERROR_MESSAGE, ex);
     return Mono.fromSupplier(
@@ -63,10 +68,10 @@ public class ProxyWebClientService implements IProxyWebClientService {
         });
   }
 
-  private URI buildUriComponent() {
-    return UriComponentsBuilder.fromUriString(proxyServiceUrl)
-        .pathSegment(proxyServiceEndpoint)
-        .queryParam(PROXY_URI_QUERY_PARAM, proxyServiceSecret)
+  private URI buildUriComponent(String endpoint) {
+    return UriComponentsBuilder.fromUriString(proxyWebserviceBaseUrl)
+        .pathSegment(endpoint)
+        .queryParam(PROXY_URI_QUERY_PARAM, proxyWebserviceSecret)
         .build()
         .toUri();
   }

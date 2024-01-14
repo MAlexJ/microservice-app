@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Get bills",
+			"name": "Get bill statuses by bill number in url",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -37,7 +37,7 @@
 			"response": []
 		},
 		{
-			"name": "SearchResults",
+			"name": "Find bills by creteria",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -60,35 +60,6 @@
 					"path": [
 						"v1",
 						"searchResults"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get bills v2",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n   \"url\":\"https://jsoup.org/cookbook/extracting-data/selector-syntax\",\r\n   \"xpath\": \"/html/body/div[1]/div[3]/div[1]/div/p[1]\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{app-http-parser-service-host}}:{{app-http-parser-service-port}}/v2/proxy",
-					"protocol": "http",
-					"host": [
-						"{{app-http-parser-service-host}}"
-					],
-					"port": "{{app-http-parser-service-port}}",
-					"path": [
-						"v2",
-						"proxy"
 					]
 				}
 			},

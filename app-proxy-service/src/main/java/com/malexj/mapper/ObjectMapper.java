@@ -1,8 +1,10 @@
 package com.malexj.mapper;
 
-import com.malexj.model.api.RestApiRequest;
+import com.malexj.model.api.BillStatusRequest;
+import com.malexj.model.api.BillsRequest;
 import com.malexj.model.api.RestApiResponse;
-import com.malexj.model.proxy.ProxyRequest;
+import com.malexj.model.proxy.BillStatusesProxyRequest;
+import com.malexj.model.proxy.BillsProxyRequest;
 import com.malexj.model.proxy.ProxyResponse;
 import org.mapstruct.Mapper;
 
@@ -10,8 +12,9 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ObjectMapper {
 
-    ProxyRequest convertRequest(RestApiRequest request);
+  BillStatusesProxyRequest convertRequest(BillStatusRequest request);
 
-    RestApiResponse convertResponse(ProxyResponse response);
+  BillsProxyRequest convertRequest(BillsRequest request);
 
+  RestApiResponse convertResponse(ProxyResponse response);
 }

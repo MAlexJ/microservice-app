@@ -5,7 +5,7 @@ import lombok.Data;
 
 /** API Json request representation */
 @Data
-public class RestApiRequest {
+public class BillStatusRequest {
 
   /** Url to site */
   @JsonProperty("url")

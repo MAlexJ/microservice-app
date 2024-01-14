@@ -1,9 +1,8 @@
 package com.malexj.model.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
-
 import com.malexj.model.ResponseState;
+import java.util.List;
 import lombok.Data;
 
 @Data

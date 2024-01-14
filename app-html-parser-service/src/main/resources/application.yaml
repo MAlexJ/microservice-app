@@ -17,7 +17,8 @@ proxy-service:
   application:
     name: app-proxy-service
   endpoint:
-    proxy: /v1/proxy
+    proxy:
+      statuses: /v1/bill/statuses
 
 management:
   health.circuitbreakers.enabled: true
