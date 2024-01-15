@@ -85,30 +85,26 @@ app.component('monitor', {
                <b>User subscriptions</b>
                <br>
                {{ clock | date:'medium'}}
+                 <br>
+              username: {{ subscriptions.user.username}}
             </div>
             <div class="card-body">
                <div class="table-responsive">
                   <table class="table table-sm">
                      <thead>
                         <tr>
-                           <th scope="col">Id</th>
-                           <th scope="col">User</th>
-                           <th scope="col">Email</th>
-                           <th scope="col">Bills</th>
-                           <th scope="col">Active</th>
-                           <th scope="col">Date</th>
+                           <th scope="col">Number</th>
+                           <th scope="col">Name</th>
+                           <th scope="col">RegistrationDate</th>
+                           <th scope="col">Link</th>
                         </tr>
                      </thead>
                      <tbody>
-                        <tr ng-repeat="item in subscriptions track by $index">
-                           <td>{{item.id}}</td>
-                           <td>{{item.user.username}}</td>
-                           <td>{{item.user.email}}</td>
-                           <td>
-                              <div ng-repeat="bill in item.bills track by $index"> number: {{bill.number}}, link: <a ng-href='{{bill.link}}'>{{bill.link}}</div>
-                           </td>
-                           <td>{{item.active}}</td>
-                           <td>{{item.createdDate | date:'HH:mm:ss'}}</td>
+                        <tr ng-repeat="bill in subscriptions.bills track by $index">
+                           <td>{{bill.number}}</td>
+                           <td>{{bill.name}}</td>
+                           <td>{{bill.registrationDate}}</td>
+                           <td> <a ng-href='{{bill.link}}'>{{bill.link}}</td>
                         </tr>
                      </tbody>
                   </table>
