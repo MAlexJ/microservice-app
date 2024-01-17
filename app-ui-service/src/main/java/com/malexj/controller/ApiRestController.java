@@ -24,17 +24,12 @@ public class ApiRestController {
 
   @Lazy protected final EurekaClient eurekaClient;
 
-  private final Collection<Bill> billList;
-
   private final WebClient webClient;
 
-  private static final User DEFAULT_USER;
+  /** Mock data for testing */
+  private final User user;
 
-  static {
-    DEFAULT_USER = new User();
-    DEFAULT_USER.setUsername("Alex");
-    DEFAULT_USER.setEmail("alex@dmail.com");
-  }
+  private final Collection<Bill> billList;
 
   protected String discoveryServiceUrl() {
     InstanceInfo nextServerFromEureka =
@@ -54,7 +49,7 @@ public class ApiRestController {
 
     var sub = new Subscription();
     sub.setActive(true);
-    sub.setUser(DEFAULT_USER);
+    sub.setUser(user);
     sub.setBills(billList.stream().toList());
     return Mono.just(new ResponseEntity<>(sub, HttpStatus.OK));
   }

@@ -1,6 +1,7 @@
 package com.malexj;
 
 import com.malexj.model.Bill;
+import com.malexj.model.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +33,14 @@ public class AppUiServiceApplication {
     b1.setName("New description");
     collection.add(b1);
     return collection;
+  }
+
+  @Bean
+  public User user() {
+    var user = new User();
+    user.setUsername("Alex");
+    user.setEmail("alex@gmail.com");
+    return user;
   }
 
   public static void main(String[] args) {
