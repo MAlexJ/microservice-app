@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    id "com.github.ben-manes.versions" version "${dependencyVersions}"
 }
 
 group = 'com.malexj'
@@ -38,7 +39,7 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.2'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.12.1'
 }
 
 dependencyManagement {

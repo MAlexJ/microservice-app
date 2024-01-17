@@ -55,3 +55,19 @@ How to set up gmail account is indicated in app-mail-service project's redmi fil
 ### IDE code style
 
 link: https:github.com/google/google-java-format/tree/master
+
+
+### Grable
+
+Plugins:
+
+1. Gradle Versions Plugin
+
+Displays a report of the project dependencies that are up-to-date, exceed the latest version found,
+have upgrades, or failed to be resolved
+
+info: https://github.com/ben-manes/gradle-versions-plugin
+
+```
+run gradle dependencyUpdates
+```
