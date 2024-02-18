@@ -34,8 +34,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation "me.paulschwarz:spring-dotenv:${paulschwarzDotenv}"
-    implementation 'org.springframework.retry:spring-retry:2.0.3'
-    implementation 'org.springframework:spring-aspects:6.0.12'
+    implementation "org.springframework.retry:spring-retry:${springRetryVersion}"
+    implementation "org.springframework:spring-aspects:${springAspectsVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     compileOnly 'org.projectlombok:lombok'

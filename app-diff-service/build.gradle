@@ -28,7 +28,7 @@ ext {
 
 
 dependencies {
-    implementation 'com.google.guava:guava:32.1.2-jre'
+    implementation "com.google.guava:guava:${googleGuavaVersion}"
     implementation "me.paulschwarz:spring-dotenv:${paulschwarzDotenv}"
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
