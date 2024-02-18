@@ -56,7 +56,6 @@ How to set up gmail account is indicated in app-mail-service project's redmi fil
 
 link: https:github.com/google/google-java-format/tree/master
 
-
 ### Grable
 
 Plugins:
@@ -69,5 +68,5 @@ have upgrades, or failed to be resolved
 info: https://github.com/ben-manes/gradle-versions-plugin
 
 ```
-run gradle dependencyUpdates
+ gradle dependencyUpdates
 ```
