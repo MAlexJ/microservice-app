@@ -9,8 +9,8 @@ to which the user has subscribed.
 ### project settings:
 
 - java 21
-- gradle 8.5
-- Spring boot 3 (v.3.2.0)
+- gradle 8.7
+- Spring boot 3 (v.3.2.4)
 
 ### Project structure
 
